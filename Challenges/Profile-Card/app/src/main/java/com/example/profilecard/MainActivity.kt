@@ -8,6 +8,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -90,13 +91,27 @@ fun ProfileCard(
 //    modifier: Modifier = Modifier,
     userData: UserData,
 ){
+    val (isClicked, setIsClick) = remember {
+        mutableStateOf(false)
+    }
+
+    val cardWidth = if (isClicked) 300.dp else 250.dp
+
     ElevatedCard (
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
+            defaultElevation = 8.dp
         ),
         modifier = Modifier
+            .clickable { setIsClick(!isClicked)}
+//            .onFocusEvent { setIsClick(!isClicked) }
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioHighBouncy,
+                    stiffness = Spring.StiffnessHigh
+                )
+            )
             .height(350.dp)
-            .width(250.dp)
+            .width(cardWidth)
             .padding(15.dp)
     ){
         Column(
@@ -143,26 +158,25 @@ fun ProfileCard(
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            val (isLoading, setIsLoading) = remember { mutableStateOf(false) }
 
             SideEffect {
-                Log.d("TAG", "clicked : $isLoading")
+                Log.d("TAG", "clicked : $isClicked")
             }
 
-            val btnWidth = if (isLoading) 180.dp else 120.dp
+            val btnWidth = if (isClicked) 180.dp else 120.dp
             Button(
-                onClick = { setIsLoading(!isLoading) },
-
-                modifier = Modifier.animateContentSize(
+                onClick = { setIsClick(!isClicked) },
+                modifier = Modifier
+                    .animateContentSize(
 //                    animationSpec = tween(
 //                        durationMillis = 300,
 //                        easing = LinearOutSlowInEasing
 //                    )
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessHigh
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessHigh
+                        )
                     )
-                )
                     .width(btnWidth)
             ) {
                 Text(
