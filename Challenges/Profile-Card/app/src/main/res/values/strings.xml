@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Profile Card</string>
+    <string name="view_profile">View Profile</string>
 </resources>
