@@ -38,24 +38,6 @@ It is achieved by replacing the state variable with two parameter:
     * value: T - the current value to display.
     * onValueChange: (T) -> Unit - event that requests the value to change, where T is the proposed new value.
 
-`@Composable
-fun HelloScreen() {
-var name by rememberSaveable { mutableStateOf("") }
-
-    HelloContent(name = name, onNameChange = { name = it })
-}
-
-@Composable
-fun HelloContent(name: String, onNameChange: (String) -> Unit) {
-Column(modifier = Modifier.padding(16.dp)) {
-Text(
-text = "Hello, $name",
-modifier = Modifier.padding(bottom = 8.dp),
-style = MaterialTheme.typography.bodyMedium
-)
-OutlinedTextField(value = name, onValueChange = onNameChange, label = { Text("Name") })
-}
-}`
 
 ## Rules when state hoisting
 1. State should be hoisted to at _lowest common parent_ of all composable that use the state(read).
