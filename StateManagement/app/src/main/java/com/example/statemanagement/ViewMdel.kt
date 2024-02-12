@@ -1,7 +1,10 @@
 package com.example.statemanagement
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -72,3 +75,10 @@ class DiceRollViewModel: ViewModel(){
 //      {nameViewModel.publicFunction()} - accessing the business logic function.
 //}
 
+@Composable
+fun DiceScreen(
+    viewModel: DiceRollViewModel = viewModel()
+){
+    val uiState by viewModel.uiState.collectAsState()
+    //Update UI elements
+}
