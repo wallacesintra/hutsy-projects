@@ -41,18 +41,20 @@ fun Output(
             ),
     ) {
         Text(
-            text = state.number1 + (state.operation ?:"") + state.number2,
+            text = state.number1 + (state.operation?.symbol ?: "") + state.number2,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             softWrap = true,
             style = if (showResult) MaterialTheme.typography.bodyMedium
                     else MaterialTheme.typography.titleLarge,
+            fontSize = 32.sp,
         )
         AnimatedVisibility(visible = showResult) {
             Text(
                 text = state.result.toString(),
                 style = MaterialTheme.typography.titleLarge,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 42.sp
             )
         }
     }

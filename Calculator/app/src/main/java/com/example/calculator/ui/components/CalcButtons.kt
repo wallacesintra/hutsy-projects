@@ -20,40 +20,47 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.calculator.AllButtons
 import com.example.calculator.ButtonType
+import com.example.calculator.CalculatorActions
 import com.example.calculator.CalculatorButtons
+import com.example.calculator.viewmodel.CalculatorScreenViewModel
 
 
 @Composable
 fun CalcButton(
     button: CalculatorButtons,
+
 ){
+    val viewModel  = viewModel<CalculatorScreenViewModel>()
     Box(
         modifier = Modifier
             .padding(10.dp)
-            .size(40.dp)
+            .size(70.dp)
             .clip(CircleShape)
             .background(
                 if (button.type == ButtonType.NUMERIC) MaterialTheme.colorScheme.background
                 else MaterialTheme.colorScheme.secondaryContainer
             )
             .clickable(
-                onClick = {button.onAction}
+                onClick = { viewModel.onAction(button.onAction) }
             ),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = button.label,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            fontSize = 24.sp
         )
     }
 }
 
 @Composable
 fun ButtonsLayout(
-    buttons: List<CalculatorButtons>
+    buttons: List<CalculatorButtons>,
 ){
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
@@ -68,11 +75,12 @@ fun ButtonsLayout(
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun CalcButtonPreview(){
     Column {
 //        CalcButton(button = CalculatorButtons(5,"5",ButtonType.NUMERIC,)) {}
-        ButtonsLayout(buttons = AllButtons)
+//        ButtonsLayout(buttons = AllButtons)
     }
 }
