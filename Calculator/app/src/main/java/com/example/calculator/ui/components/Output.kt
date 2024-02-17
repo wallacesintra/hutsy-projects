@@ -19,11 +19,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.calculator.CalculatorOperations
+import com.example.calculator.viewmodel.CalculateUiState
 
 @Composable
 fun Output(
-    operation: String,
-    result: Int,
+    state: CalculateUiState,
     modifier: Modifier = Modifier
 ){
     var showResult by remember{
@@ -36,11 +37,11 @@ fun Output(
             .fillMaxWidth()
             .padding(20.dp)
             .clickable(
-                onClick = {showResult = !showResult}
+                onClick = { showResult = !showResult }
             ),
     ) {
         Text(
-            text = operation,
+            text = state.number1 + (state.operation ?:"") + state.number2,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             softWrap = true,
@@ -49,7 +50,7 @@ fun Output(
         )
         AnimatedVisibility(visible = showResult) {
             Text(
-                text = result.toString(),
+                text = state.result.toString(),
                 style = MaterialTheme.typography.titleLarge,
                 overflow = TextOverflow.Ellipsis
             )
@@ -60,5 +61,5 @@ fun Output(
 @Preview(showBackground = true)
 @Composable
 fun OutputPreview(){
-    Output(operation = "34 + 6790887666655443", result = 678886868)
+    Output(state = CalculateUiState("78","78",CalculatorOperations.Add,56.9))
 }

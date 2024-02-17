@@ -8,10 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,19 +28,18 @@ import com.example.calculator.CalculatorButtons
 @Composable
 fun CalcButton(
     button: CalculatorButtons,
-    onClick: () -> Unit = {}
 ){
     Box(
         modifier = Modifier
             .padding(10.dp)
             .size(40.dp)
-            .clip(RoundedCornerShape(100))
+            .clip(CircleShape)
             .background(
                 if (button.type == ButtonType.NUMERIC) MaterialTheme.colorScheme.background
                 else MaterialTheme.colorScheme.secondaryContainer
             )
             .clickable(
-                onClick = onClick
+                onClick = {button.onAction}
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -74,7 +72,7 @@ fun ButtonsLayout(
 @Composable
 fun CalcButtonPreview(){
     Column {
-        CalcButton(button = CalculatorButtons(5,"5",ButtonType.NUMERIC)) {}
+//        CalcButton(button = CalculatorButtons(5,"5",ButtonType.NUMERIC,)) {}
         ButtonsLayout(buttons = AllButtons)
     }
 }
