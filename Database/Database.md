@@ -106,7 +106,9 @@ access using [filesDir] property of a context objects
 **Access and store files**
 use File API to access and store files.
 
-`val file = File(context.filesDir, filename)`
+```kotlin
+val file = File(context.filesDir, filename)
+```
 
 
 **store a file using a stream**
@@ -138,12 +140,16 @@ context.openFileInput(filename).bufferedReader().useLines { lines ->
 **view list of files**
 can get an array containing the names of all files within the filesDir directory by calling [fileList()]
 
-`var files: Array<String> = context.fileList()`
+```kotlin
+var files: Array<String> = context.fileList()
+```
 
 **create nested directories**
 - can create nested directories, open an inner directory, by calling 
 [getDir()] in Kotlin-based code
-`context.getDir(dirName, Context.MODE_PRIVATE)`
+```kotlin
+context.getDir(dirName, Context.MODE_PRIVATE)
+```
 
 
 - by passing the root directory and a new directory named into a File construct in Java-based code
