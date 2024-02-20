@@ -72,3 +72,103 @@ READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, and MANAGE_EXTERNAL_STORAGE.
 **Scoped Storage**
 To give users more control over their files and to limit file clutter, apps that target Android 10 (API level 29) and higher are given scoped access into external storage, or scoped storage, by default. Such apps have access only to the app-specific directory on external storage, as well as specific types of media that the app has created.
 
+
+# Access app-specific files
+App creates files that other app shouldn't or don't need to access.
+
+system provides:
+* **Internal storage directories**
+They are for:
+- storing persistent data
+- storing cache data
+system prevents other apps from accessing these locations, therefore they are good for storing sensitive data that only the app can access.
+
+* **External Storage Directories**
+- store persistent files
+- store cache data
+Another apps can access these directories if they have proper permissions
+
+
+When the user uninstalls the app, files saved in app-specific storage are removed.
+
+
+## **Access from internal storage**
+for each app, the system provides directories within internal storage where an app can organize its files.
+- one directory is designed for persistents files
+- one directory contains cached files.
+The app doesn't require any system permission to read and write to files in these directories.
+
+these directories tend to be small. Before writing app-specific files to internal storage, your app should query the free space on the device.
+
+### **Access persistent files**
+access using [filesDir] property of a context objects
+
+**Access and store files**
+use File API to access and store files.
+
+`val file = File(context.filesDir, filename)`
+
+
+**store a file using a stream**
+can call [openFileOutput()] to get a [FileOutputStream] that writes a file within the filesDir directory.
+
+```kotlin
+val filename = "myfile"
+val fileContents = "Hello, its Sinatra!"
+context.openFileOutput(filename, Context.MODE_PRIVATE).use {
+    it.write(fileContents.toByteArray())
+}
+```
+
+ On devices that run Android 7.0 (API level 24) or higher, unless you pass the Context.MODE_PRIVATE file mode into openFileOutput(), a SecurityException occurs.
+
+To allow other apps to access files stored in this directory within internal storage, use a FileProvider with the FLAG_GRANT_READ_URI_PERMISSION attribute.
+
+**Access a file using a stream**
+to read a file as a stream, use [openFileInput()]
+
+```kotlin
+context.openFileInput(filename).bufferedReader().useLines { lines ->
+        lines.fold("") {some, text ->
+            "$some \n $text"
+        }
+}
+```
+
+**view list of files**
+can get an array containing the names of all files within the filesDir directory by calling [fileList()]
+
+`var files: Array<String> = context.fileList()`
+
+**create nested directories**
+- can create nested directories, open an inner directory, by calling 
+[getDir()] in Kotlin-based code
+`context.getDir(dirName, Context.MODE_PRIVATE)`
+
+
+- by passing the root directory and a new directory named into a File construct in Java-based code
+```java
+File directory = context.getFilesDir();
+File file = new File(directory, filename);
+```
+
+
+## **Create cache files**
+to store sensitive data temporarily, use the app's designated cache directory in the internal storage to save the data.
+
+[Note: This cache directory is designed to store a small amount of your app's sensitive data. To determine how much cache space is currently available for your app, call getCacheQuotaBytes().]
+
+To create a cached file, call [File.createTempFile()]
+`File.createTempFile(filename, null, context.cacheDir)`
+
+To access a file in cache dir use [cacheDir] property of a context object and the File API.
+`val cacheFile = File(context.cacheDir, filename)`
+
+[Caution: When the device is low on internal storage space, Android may delete these cache files to recover space. So check for the existence of your cache files before reading them.]
+
+## **Remove cache files**
+use [delete()] method on a File object that represent the files.
+`cacheFile.delete()`
+
+use deleteFile() method of the app's context, passing in the name of the file.
+`context.deleteFile(cacheFileName)`
