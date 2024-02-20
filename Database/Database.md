@@ -159,16 +159,24 @@ to store sensitive data temporarily, use the app's designated cache directory in
 [Note: This cache directory is designed to store a small amount of your app's sensitive data. To determine how much cache space is currently available for your app, call getCacheQuotaBytes().]
 
 To create a cached file, call [File.createTempFile()]
-`File.createTempFile(filename, null, context.cacheDir)`
+```kotlin
+File.createTempFile(filename, null, context.cacheDir)
+```
 
 To access a file in cache dir use [cacheDir] property of a context object and the File API.
-`val cacheFile = File(context.cacheDir, filename)`
+```kotlin
+val cacheFile = File(context.cacheDir, filename)
+```
 
 [Caution: When the device is low on internal storage space, Android may delete these cache files to recover space. So check for the existence of your cache files before reading them.]
 
 ## **Remove cache files**
 use [delete()] method on a File object that represent the files.
-`cacheFile.delete()`
+```kotlin
+cacheFile.delete()
+```
 
 use deleteFile() method of the app's context, passing in the name of the file.
-`context.deleteFile(cacheFileName)`
+```kotlin
+context.deleteFile(cacheFileName)
+```
