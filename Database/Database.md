@@ -21,7 +21,7 @@ structure of a relational db is similar to classes & objects in kotlin.
 # SQLite
 it is lightweight C library for relational database management with SQL.
 
-Int - INTEGER \n
-String - VARCHAR or TEXT\n
-Boolean - BOOLEAN\n
-Float, Double - REAL\n
+Int - INTEGER 
+String - VARCHAR or TEXT
+Boolean - BOOLEAN
+Float, Double - REAL
