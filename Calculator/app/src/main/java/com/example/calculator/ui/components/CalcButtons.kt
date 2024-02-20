@@ -22,17 +22,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.calculator.AllButtons
 import com.example.calculator.ButtonType
-import com.example.calculator.CalculatorActions
 import com.example.calculator.CalculatorButtons
 import com.example.calculator.viewmodel.CalculatorScreenViewModel
-
 
 @Composable
 fun CalcButton(
     button: CalculatorButtons,
-
 ){
     val viewModel  = viewModel<CalculatorScreenViewModel>()
     Box(
@@ -74,7 +70,6 @@ fun ButtonsLayout(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

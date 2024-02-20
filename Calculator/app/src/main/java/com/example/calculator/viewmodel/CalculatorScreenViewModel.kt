@@ -1,16 +1,11 @@
 package com.example.calculator.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.calculator.CalculatorActions
 import com.example.calculator.CalculatorOperations
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import java.nio.file.Files.delete
 
 data class CalculateUiState(
     val number1: String = "",
@@ -23,8 +18,7 @@ class CalculatorScreenViewModel: ViewModel() {
 //    private var _uiState = MutableStateFlow(CalculateUiState())
 //    var uiState: StateFlow<CalculateUiState> = _uiState.asStateFlow()
     var state by mutableStateOf(CalculateUiState())
-
-
+        private set
 
     fun onAction(action: CalculatorActions){
         when(action){
@@ -109,6 +103,6 @@ class CalculatorScreenViewModel: ViewModel() {
         )
     }
     companion object {
-        private const val MAX_NUM_LENGTH = 8
+        private const val MAX_NUM_LENGTH = 12
     }
 }
