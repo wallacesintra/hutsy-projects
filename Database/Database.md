@@ -7,12 +7,14 @@ Relational database has :
 - rows - contains the actual data that consists of values for each column in the table.
 
 structure of a relational db is similar to classes & objects in kotlin.
-`data class Student(
+```kotlin
+data class Student(
     id: Int,
     name: String,
     major: String,
     gpa: Double
-)`
+)
+```
 
 - classes, like tables, models the data you want to represent in the app.
 - properties, like columns, define the specific pieces of data that every  instance of the class should contain.
