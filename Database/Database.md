@@ -159,7 +159,7 @@ File file = new File(directory, filename);
 ```
 
 
-## **Create cache files**
+### **Create cache files**
 to store sensitive data temporarily, use the app's designated cache directory in the internal storage to save the data.
 
 [Note: This cache directory is designed to store a small amount of your app's sensitive data. To determine how much cache space is currently available for your app, call getCacheQuotaBytes().]
@@ -176,7 +176,7 @@ val cacheFile = File(context.cacheDir, filename)
 
 [Caution: When the device is low on internal storage space, Android may delete these cache files to recover space. So check for the existence of your cache files before reading them.]
 
-## **Remove cache files**
+### **Remove cache files**
 use [delete()] method on a File object that represent the files.
 ```kotlin
 cacheFile.delete()
@@ -186,3 +186,143 @@ use deleteFile() method of the app's context, passing in the name of the file.
 ```kotlin
 context.deleteFile(cacheFileName)
 ```
+
+
+## **Access from external storage**
+System provides directories within the external storage to organize files.
+* one dir for persistent files
+* one dir for cached files
+
+android 9/lower, app can access the app-specific files that belong to other apps if they have the appropriate permissions.
+
+android 10/higher, users have more control over their files & limit file clutter, users are given scoped access into external storage. when scoped storage is enabled, the apps can't access the app-specific dir that belong to other apps.
+
+### **verify that storage is available**
+check if the external storage is available before reading or writing into it.
+can query the volume's state by calling [Environment.getExternalStorageState()]:
+- if returned state is [MEDIA_MOUNTED] - read and write app-specific files in external storage.
+- if its [MEDIA_MOUNTED_READ_ONLY] - read only app-specific files in external storage.
+
+```kotlin
+// Checks if a volume containing external storage is available
+// for read and write.
+fun isExternalStorageWritable(): Boolean {
+    return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+}
+
+// Checks if a volume containing external storage is available to at least read.
+fun isExternalStorageReadable(): Boolean {
+     return Environment.getExternalStorageState() in
+        setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
+}
+```
+
+
+On devices without removable external storage, use the following command to enable a virtual volume for testing your external storage availability logic:
+```kotlin
+adb shell sm set-virtual-disk true
+```
+
+### **Select a physical storage location**
+to access the different locations, call [ContextCompat.getExternalFilesDirs()] - it will return an array.
+
+the first element is considered the primary external storage volume, use this volume unless its full/unavailable.
+
+```kotlin
+val externalStorageVolumes: Array<out File> =
+        ContextCompat.getExternalFilesDirs(applicationContext, null)
+val primaryExternalStorage = externalStorageVolumes[0]
+```
+
+[Note: If your app is used on a device that runs Android 4.3 (API level 18) or lower, then the array contains just one element, which represents the primary external storage volume.]
+
+### **Access persistent files**
+to access app-specific files from external storage, call [getExternalFilesDir()]
+
+to help maintain app's performance, dont open & close the same file multiple times.
+
+```kotlin
+val appSpecificExternalDir = File(context.getExternalFilesDir(null), filename)
+```
+
+[Note: On Android 11 (API level 30) and higher, apps cannot create their own app-specific directory on external storage.]
+
+
+### **Create cache files**
+use [externalCacheDir]
+
+```kotlin
+val externalCacheFile = File(context.externalCacheDir, filename)
+```
+
+**Remove cache files**
+use [delete()] on a File onject that represents the file.
+
+```kotlin
+externalCacheFile.delete()
+```
+
+### **Media Content**
+if app uses media files, store them in app-specific directories within external storage.
+
+```kotlin
+fun getAppSpecificAlbumStorageDir(context: Context, albumName: String): File? {
+    // Get the pictures directory that's inside the app-specific directory on
+    // external storage.
+    val file = File(context.getExternalFilesDir(
+            Environment.DIRECTORY_PICTURES), albumName)
+    if (!file?.mkdirs()) {
+        Log.e(LOG_TAG, "Directory not created")
+    }
+    return file
+}
+```
+It's important that you use directory names provided by API constants like DIRECTORY_PICTURES. These directory names ensure that the files are treated properly by the system. If none of the pre-defined sub-directory names suit your files, you can instead pass null into getExternalFilesDir(). This returns the root app-specific directory within external storage.
+
+## **Query free space**
+to find out how much space the device can provide the app, call [getAllocatableBytes()]
+
+the return value of getAllocatableBytes() might be larger than the current amount of free space on the device. This is because the system has identified files that it can remove from other apps' cache directories.
+
+if there is enough space to save your app's data, call [allocateBytes()]
+otherwise request the user to remove some files/remove all cache files from the device.
+
+```kotlin
+// App needs 10 MB within internal storage.
+const val NUM_BYTES_NEEDED_FOR_MY_APP = 1024 * 1024 * 10L;
+
+val storageManager = applicationContext.getSystemService<StorageManager>()!!
+val appSpecificInternalDirUuid: UUID = storageManager.getUuidForPath(filesDir)
+val availableBytes: Long =
+        storageManager.getAllocatableBytes(appSpecificInternalDirUuid)
+if (availableBytes >= NUM_BYTES_NEEDED_FOR_MY_APP) {
+    storageManager.allocateBytes(
+        appSpecificInternalDirUuid, NUM_BYTES_NEEDED_FOR_MY_APP)
+} else {
+    val storageIntent = Intent().apply {
+        // To request that the user remove all app cache files instead, set
+        // "action" to ACTION_CLEAR_APP_CACHE.
+        action = ACTION_MANAGE_STORAGE
+    }
+}
+```
+[Note: You aren't required to check the amount of available space before you save your file. You can instead try writing the file right away, then catch an IOException if one occurs. You may need to do this if you don't know exactly how much space you need. For example, if you change the file's encoding before you save it by converting a PNG image to JPEG, you don't know the file's size beforehand.]
+
+**Create a storage management activity**
+you can declare custom manage space activity using and [android:manageSpaceActivity] attribute in the manifest file
+
+ File manager apps can invoke this activity even when your app doesn't export the activity; that is, when your activity sets android:exported to false.
+
+**Ask user to remove some device files**
+invoke an intent that includes the [ACTION_MANAGE_STORAGE] action. 
+This intent displays a promps to the user, can show the amount of free space available on the device.
+
+```kotlin
+StorageStatsManager.getFreeBytes() / StorageStatsManager.getTotalBytes()
+```
+
+**Ask user to remove all cache files**
+can request the user to clear the cache files from all apps on the devices.
+invoke an intent that includes the [ACTION_CLEAR_APP_CACHE] intent action.
+
+[Caution: The ACTION_CLEAR_APP_CACHE intent action can substantially affect device battery life and might remove a large number of files from the device.]
