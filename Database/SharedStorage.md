@@ -89,4 +89,227 @@ on andriod 9 & lower,
 ### **Storage Access Framework required for accessing other apps downloads**
 must use Storage Access Framework
 
-## **Media location permission**
+### **Media location permission**
+In android 10&higher, needs to retrieve unredacted EXIF metadata from the photos, you need to declare the [ACCESS_MEDIA_LOCATION] permission in the app's manifest, then request this permission at runtime.
+
+
+## **Check for updates to media store**
+call getVersion(). the returned version is unique string that changes whenever the media store changes substantially.
+
+If the returned version is different from the last synced version, rescan & resync app's media cache.
+
+## **Query a media collection**
+To find media that satisfies a particular set of conditions.
+
+```kotlin
+// Need the READ_EXTERNAL_STORAGE permission if accessing video files that your
+// app didn't create.
+
+// Container for information about each video.
+data class Video(val uri: Uri,
+    val name: String,
+    val duration: Int,
+    val size: Int
+)
+val videoList = mutableListOf<Video>()
+
+val collection =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        MediaStore.Video.Media.getContentUri(
+            MediaStore.VOLUME_EXTERNAL
+        )
+    } else {
+        MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+    }
+
+val projection = arrayOf(
+    MediaStore.Video.Media._ID,
+    MediaStore.Video.Media.DISPLAY_NAME,
+    MediaStore.Video.Media.DURATION,
+    MediaStore.Video.Media.SIZE
+)
+
+// Show only videos that are at least 5 minutes in duration.
+val selection = "${MediaStore.Video.Media.DURATION} >= ?"
+val selectionArgs = arrayOf(
+    TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES).toString()
+)
+
+// Display videos in alphabetical order based on their display name.
+val sortOrder = "${MediaStore.Video.Media.DISPLAY_NAME} ASC"
+
+val query = ContentResolver.query(
+    collection,
+    projection,
+    selection,
+    selectionArgs,
+    sortOrder
+)
+query?.use { cursor ->
+    // Cache column indices.
+    val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
+    val nameColumn =
+            cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
+    val durationColumn =
+            cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
+    val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
+
+    while (cursor.moveToNext()) {
+        // Get values of columns for a given video.
+        val id = cursor.getLong(idColumn)
+        val name = cursor.getString(nameColumn)
+        val duration = cursor.getInt(durationColumn)
+        val size = cursor.getInt(sizeColumn)
+
+        val contentUri: Uri = ContentUris.withAppendedId(
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+            id
+        )
+
+        // Stores column values and the contentUri in a local object
+        // that represents the media file.
+        videoList += Video(contentUri, name, duration, size)
+    }
+}
+```
+
+
+## **Load file thumbnail**
+show multiple media files and request user to select one of these files.
+
+use loadThumbnail() and pass in the size of the thumbnail:
+
+```kotlin
+// Load thumbnail of a specific media item.
+val thumbnail: Bitmap =
+        applicationContext.contentResolver.loadThumbnail(
+        content-uri, Size(640, 480), null)
+
+```
+
+## **Open media file**
+### File descriptor
+open media file use a file descriptor.
+
+```kotlin
+// Open a specific media item using ParcelFileDescriptor.
+val resolver = applicationContext.contentResolver
+
+// "rw" for read-and-write.
+// "rwt" for truncating or overwriting existing file contents.
+val readOnlyMode = "r"
+resolver.openFileDescriptor(content-uri, readOnlyMode).use { pfd ->
+    // Perform operations on "pfd".
+}
+```
+
+### File stream
+using file stream
+
+```kotlin
+// Open a specific media item using InputStream.
+val resolver = applicationContext.contentResolver
+resolver.openInputStream(content-uri).use { stream ->
+    // Perform operations on "stream".
+}
+
+```
+
+### Direct file paths
+Use either:
+1. File API
+2. Native libraries, ie fopen()
+
+## **Consideration when accessing media content**
+
+
+# **Photo Picker**
+it provides browsable, searchable interface for user to select arranged from the newest to the oldest.
+
+## Use Jetpack Activity contracts
+* PickVisualMedia - select a single image/video
+* PickMultipleVisualMedia - select multiple images/videos
+
+### **select a single media item**
+use PickVisualMedia
+
+```kotlin
+// Registers a photo picker activity launcher in single-select mode.
+val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
+    // Callback is invoked after the user selects a media item or closes the
+    // photo picker.
+    if (uri != null) {
+        Log.d("PhotoPicker", "Selected URI: $uri")
+    } else {
+        Log.d("PhotoPicker", "No media selected")
+    }
+}
+
+// Include only one of the following calls to launch(), depending on the types
+// of media that you want to let the user choose from.
+
+// Launch the photo picker and let the user choose images and videos.
+pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageAndVideo))
+
+// Launch the photo picker and let the user choose only images.
+pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+
+// Launch the photo picker and let the user choose only videos.
+pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.VideoOnly))
+
+// Launch the photo picker and let the user choose only images/videos of a
+// specific MIME type, such as GIFs.
+val mimeType = "image/gif"
+pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.SingleMimeType(mimeType)))
+```
+
+### **Select multiple media items**
+
+```kotlin
+// Registers a photo picker activity launcher in multi-select mode.
+// In this example, the app lets the user select up to 5 media files.
+val pickMultipleMedia =
+        registerForActivityResult(PickMultipleVisualMedia(5)) { uris ->
+    // Callback is invoked after the user selects media items or closes the
+    // photo picker.
+    if (uris.isNotEmpty()) {
+        Log.d("PhotoPicker", "Number of items selected: ${uris.size}")
+    } else {
+        Log.d("PhotoPicker", "No media selected")
+    }
+}
+
+// For this example, launch the photo picker and let the user choose images
+// and videos. If you want the user to select a specific type of media file,
+// use the overloaded versions of launch(), as shown in the section about how
+// to select a single media item.
+pickMultipleMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageAndVideo))
+```
+
+## Device availability
+- android 11 and higher
+- receive changes to Modular system Components through Google System Updates
+
+Android 10 & lower can install a backported version of photo picker. Automatic installation of the backported photo picker module through Google Play services, add the following entry to the <application> tag in the app manifest file:
+
+```kotlin
+<!-- Trigger Google Play services to install the backported photo picker module. -->
+<service android:name="com.google.android.gms.metadata.ModuleDependencies"
+         android:enabled="false"
+         android:exported="false"
+         tools:ignore="MissingClass">
+    <intent-filter>
+        <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+    </intent-filter>
+    <meta-data android:name="photopicker_activity:0:required" android:value="" />
+</service>
+```
+
+
+## persist media file access
+By default, the system grants your app access to media files until the device is restarted or until your app stops. If your app performs long-running work, such as uploading a large file in the background, you might need this access to be persisted for a longer period of time. To do so, call the takePersistableUriPermission() method:
+
+```kotlin
+val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+context.contentResolver.takePersistableUriPermission(uri, flag)
+```
