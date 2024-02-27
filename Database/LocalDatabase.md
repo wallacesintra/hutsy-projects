@@ -330,3 +330,217 @@ interface UserDao {
     fun loadRawUsersOlderThan(minAge: Int): Cursor
 }
 ```
+
+
+# **Define relationship between objects**
+define relationships using: 
+
+1. ### **Intermediate data class**
+define a data class that models the relational btn the Room entities. The data class holds the pairings between instances of one entity and instances of another entity as embedded objects.
+
+```kotlin
+@Dao
+interface UserBookDao {
+    @Query(
+        "SELECT user.name AS userName, book.name AS bookName " +
+        "FROM user, book " +
+        "WHERE user.id = book.user_id"
+    )
+    fun loadUserAndBookNames(): LiveData<List<UserBook>>
+}
+
+data class UserBook(val userName: String?, val bookName: String?)
+```
+2. ### **Multimap return types**
+define a multimap return type methods based on the map structure that you want and define the relationship between your entities directly in the SQL query.
+
+```kotlin
+@Query(
+    "SELECT * FROM user" +
+    "JOIN book ON user.id = book.user_id"
+)
+fun loadUserAndBookNames(): Map<User, List<Book>>
+```
+
+## **Create embedded objects**
+@Embedded annaotation - represent an object that you'd like to decompose into its subfields within a table.
+
+```kotlin
+data class Address(
+    val street: String?,
+    val state: String?,
+    val city: String?,
+    @ColumnInfo(name = "post_code") val postCode: Int
+)
+
+@Entity
+data class User(
+    @PrimaryKey val id: Int,
+    val firstName: String?,
+    @Embedded val address: Address?
+)
+```
+
+the table representing a User object then contains columns with names: id, firstName, street, state, city, and post_code
+
+## **define one-to-one relationships**
+is a relationship where each instance of the parent entity corresponds to exactly one instance of the child entity, and the reverse is also true.
+
+example: a music streaming app where the user has a library of songs that they own. Each user has only one library, and each library corresponds to exactly one user.
+
+1. first define a class for entities, one of the entities must include a variable that is a reference to the primary key of the other entity.
+
+```kotlin
+@Entity
+data class User(
+    @PrimaryKey val userId: Long,
+    val name: String,
+    val age: Int
+)
+
+@Entity
+data class Library(
+    @PrimaryKey val libraryId: Long,
+    val userOwnerId: Long
+)
+```
+2. model one-to-one relationship between the two entities, create a new data class where each instance holds an instance of the parent entity and the corresponding instance of the child entity.
+add the @Relation annotation to the instance of the child entity, with parentColumn set to the primary key column of the parent entity and entityColumn set to the name of the column of the child entity that reference the parent entity's primary key.
+
+```kotlin
+data class UserAndLibrary(
+    @Embedded val user: User,
+    @Relation(
+         parentColumn = "userId",
+         entityColumn = "userOwnerId"
+    )
+    val library: Library
+)
+```
+
+3. add a method to the DAO class that returns all instances of the data class that pairs the parent entity and the child entity. add the @Transaction annotation to this method so that the whole operation is performed atomically.
+
+```kotlin
+@Transaction
+@Query("SELECT * FROM User")
+fun getUsersAndLibraries(): List<UserAndLibrary>
+```
+
+## **define one-to-many relationship**
+is a relationship where each instance of the parent entity corresponds to zero/more instances of the child entity, but each instance of the child entity can only correspond to exactly one instance of the parent entity.
+
+example: music streaming app, the user has the ability to organize their songs into playlists. Each user can create as many playlists as they want, but each playlist is created by exactly one user. Therefore, there is a one-to-many relationship between the User entity and the Playlist entity.
+
+
+```kotlin
+@Entity
+data class User(
+    @PrimaryKey val userId: Long,
+    val name: String,
+    val age: Int
+)
+
+@Entity
+data class Playlist(
+    @PrimaryKey val playlistId: Long,
+    val userCreatorId: Long,
+    val playlistName: String
+)
+```
+
+@Relation annotation to instance of child entity, with parentColumn set to the name of the primary key column of the parent entity and entityColumn set to name of the column of the child entity that references the parent entity's primary key.
+
+```kotlin
+data class UserWithPlaylists(
+    @Embedded val user: User,
+    @Relation(
+          parentColumn = "userId",
+          entityColumn = "userCreatorId"
+    )
+    val playlists: List<Playlist>
+)
+```
+
+
+@Transaction annotation to DAO method so that the whole operation is performed atomically.
+
+```kotlin
+@Transaction
+@Query("SELECT * FROM User")
+fun getUsersWithPlaylists(): List<UserWithPlaylists>
+```
+
+## **define many-to-many relationship**
+is a relationship where each instance of the parent entity corresponds to zero/more instances of the child entity, the reverse is also true.
+
+example: In the music streaming app example, consider the songs in the user-defined playlists. Each playlist can include many songs, and each song can be a part of many different playlists. Therefore, there is a many-to-many relationship between the Playlist entity and the Song entity.
+
+1. create a class for the entities. 
+2. create an associate entity or cross-reference table among the other entities, cross-reference table must have columns for the primary key from each entity in the many-to-many relationship represented in the table.
+
+```kotlin
+@Entity
+data class Playlist(
+    @PrimaryKey val playlistId: Long,
+    val playlistName: String
+)
+
+@Entity
+data class Song(
+    @PrimaryKey val songId: Long,
+    val songName: String,
+    val artist: String
+)
+
+@Entity(primaryKeys = ["playlistId", "songId"])
+data class PlaylistSongCrossRef(
+    val playlistId: Long,
+    val songId: Long
+)
+```
+
+3. depend on how you want to query these related entities.
+    * If you want to query playlists and a list of the corresponding songs for each playlist, create a new data class that contains a single Playlist object and a list of all of the Song objects that the playlist includes.
+    * If you want to query songs and a list of the corresponding playlists for each, create a new data class that contains a single Song object and a list of all of the Playlist objects in which the song is included.
+
+
+4. model the relationship between the entities by using associateBy property in the @Relation annotation in each of these classes to identify the cross-reference entity providing the relationship btn the entities.
+
+```kotlin
+data class PlaylistWithSongs(
+    @Embedded val playlist: Playlist,
+    @Relation(
+         parentColumn = "playlistId",
+         entityColumn = "songId",
+         associateBy = Junction(PlaylistSongCrossRef::class)
+    )
+    val songs: List<Song>
+)
+
+data class SongWithPlaylists(
+    @Embedded val song: Song,
+    @Relation(
+         parentColumn = "songId",
+         entityColumn = "playlistId",
+         associateBy = Junction(PlaylistSongCrossRef::class)
+    )
+    val playlists: List<Playlist>
+)
+```
+
+5. add method to DAO class to expose the query functionality the app needs.
+
+```kotlin
+@Transaction
+@Query("SELECT * FROM Playlist")
+// returns all the resulting PlaylistWithSongs objects.
+fun getPlaylistsWithSongs(): List<PlaylistWithSongs>
+
+@Transaction
+@Query("SELECT * FROM Song")
+// returns all the resulting SongWithPlaylists objects.
+fun getSongsWithPlaylists(): List<SongWithPlaylists>
+```
+
+
+## **define nested relationship**
