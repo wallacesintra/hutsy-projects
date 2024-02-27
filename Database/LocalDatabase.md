@@ -544,3 +544,10 @@ fun getSongsWithPlaylists(): List<SongWithPlaylists>
 
 
 ## **define nested relationship**
+ query a set of three or more tables that are all related to each other. In that case, you define nested relationships between the tables.
+
+ example: in the music streaming app example, you want to query all the users, all the playlists for each user, and all the songs in each playlist for each user. Users have a one-to-many relationship with playlists, and playlists have a many-to-many relationship with songs. 
+
+
+# **Write asynchronous DAO queries**
+write DAO methods asynchronous to prevent queries from blocking the UI.
