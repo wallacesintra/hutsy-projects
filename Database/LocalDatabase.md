@@ -179,3 +179,154 @@ data class RemoteUser(
 ) : User()
 ```
 
+
+# **Accessing data using Room DAOs*
+
+define each DAO as either an interface/abstract class
+always annotate DAOs with @Dao
+
+```kotlin
+@Dao
+interface UserDao {
+    @Insert
+    fun insertAll(vararg users: User)
+
+    @Delete
+    fun delect(user: User)
+
+    @Query("SELECT * FROM user")
+    fun getAll(): List<User>
+}
+```
+
+## types of DAO methods
+### 1. Convenience methods
+perform simple insertion, update, and deletion without writing SQL statement.
+
+**Insert**
+@Insert allows to define methods that insert parameters into the table in the db.
+
+```kotlin
+@Dao
+interface UserDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertUsers(vararg users: User)
+
+    @Insert
+    fun insertBothusers(user1: User, user2: User)
+
+    @Insert
+    fun insertUsersAndFriends(user: User, friends: List<User>)
+}
+```
+
+**Update**
+@Update annotation lets you define methods that update specific rows in the db table.
+
+```kotlin
+@Dao
+interface UserDao {
+    @Update
+    fun updateUsers(vararg users: User)
+}
+```
+
+**Delete**
+@Delete
+
+```kotlin
+@Dao
+interface UserDao {
+    @Delete
+    fun deleteUsers(vararg users: User)
+}
+```
+
+### 2. Query methods
+@Query annotation - write SQL statement as expose them as DAO methods.
+can use it to perform more complex insertion, updates, and deletion.
+
+```kotlin
+@Query("SELECT * FROM user")
+fun loadAllUser(): Array<User>
+```
+
+```kotlin
+data class NameTuple(
+    @ColumnInfo(name = "first_name") val firstName: String?,
+    @Column(name = "last_name") val lastName: String?
+)
+
+// query method
+@Query("SELECT first_name, last_name FROM user")
+fun loadFullName(): List<NameTuple>
+```
+
+**pass simple parameters to a query**
+DAO methods accept parameter to filter operations.
+
+```kotlin
+@Query("SELECT * FROM user WHERE age > :minAge")
+fun loadAllUsersOlderThan(minAge: Int): Array<User>
+```
+
+```kotlin
+@Query("SELECT * FROM user WHERE age BETWEEN :minAge AND :maxAge")
+fun loadAllUsersBetweenAges(minAge: Int, maxAge: Int): Array<User>
+
+@Query("SELECT * FROM user WHERE first_name LIKE :search" +
+        "OR last_name LIKE :search")
+fun findUserWithName(search: String): List<User>
+```
+
+**pass a collection of parameters to a query**
+
+```kotlin
+@Query("SELECT * FROM user WHERE region IN (:regions)")
+fun loadUsersFromRegions(regions: List<String>): List<User>
+```
+
+**Return a multimap**
+In Room 2.4 and higher, can query columns from multiple tables without defining an additional data class by writing query methods that return a multimap.
+
+```kotlin
+@Query(
+    "SELECT * FROM user" +
+    "JOIN book ON user.id = book.user_id"
+)
+fun loadUserAndBookNames(): Map<User, List<Book>>
+```
+
+```kotlin
+@Query(
+    "SELECT * FROM user" +
+    "JOIN book ON user.id = book.user_id" +
+    "GROUP BY user.name WHERE COUNT(book.id) >= 3"
+)
+fun loadUserAndBookNames(): Map<User, List<Book>>
+```
+
+
+### Special return types
+
+**Paginated queries with the Paging library**
+Room support paginated queries through intergration with the Paging library.
+
+```kotlin
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users WHERE label LIKE :query")
+    fun pagingSource(query: String): PagingSource<Int, User>
+}
+```
+
+**Direct cursor access**
+DAO methods can return a Cursor object.
+
+```kotlin
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM user WHERE age > :minAge LIMIT 5")
+    fun loadRawUsersOlderThan(minAge: Int): Cursor
+}
+```
