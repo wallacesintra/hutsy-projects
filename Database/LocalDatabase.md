@@ -116,3 +116,66 @@ val userDao = db.userDao()
 val users: List<User> = userDao.getAll()
 ```
 
+
+# **Define data using Room entities*
+
+define Room entity annotate the class with @Entity.
+
+```kotlin
+@Entity
+data class User(
+    @PrimaryKey val id: Int,
+
+    val firstName: String?,
+    val lastName: String?
+)
+```
+tableName property of the @Entity sets the table name.
+add @ColumnInfo annotation and set the name property.
+
+```kotlin
+@Entity(tableName = "Users")
+data class User(
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "first_name") val firstName: String?,
+    @ColumnInfo(name = "last_name") val lastName: String?
+)
+```
+
+## define a composite primary key
+
+```kotlin
+@Entity(primaryKeys = ["firstName", "lastName"])
+data class User(
+    val firstName: String,
+    val lastName: String
+)
+```
+
+## ignore fields
+use @Ignore if you dont want to persist a field in an entity.
+
+```kotlin
+@Entity
+data class User(
+    @PrimaryKey val id: Int,
+    val firstName: String?,
+    val lastName: String?,
+    @Ignore val picture: Bitmap?
+)
+```
+
+in cases the entity inherits fields from a parent entity, use ignoredColumns property of the @Entity attritube.
+
+```kotlin
+open class User {
+    var picture: Bitmap? = null
+}
+
+@Entity(ignoredColumn = ["picture"])
+data class RemoteUser(
+    @PrimaryKey val id: Int,
+    val hasVpn: Boolean
+) : User()
+```
+
