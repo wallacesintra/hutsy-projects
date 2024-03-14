@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Icon
@@ -40,28 +41,29 @@ fun CityDetails(
         Text(
             text = place,
             style = MaterialTheme.typography.labelLarge,
-            fontSize = 24.sp,
+            fontSize = 22.sp,
             modifier = Modifier
-                .padding(10.dp)
+                .padding(vertical = 15.dp)
         )
         Image(
             painter = painterResource(id = R.drawable.sun ),
             contentDescription = "weather icon",
             contentScale = ContentScale.Fit,
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier
+                .padding(5.dp)
+                .size(270.dp)
         )
-
         Text(
             text = temp,
             style = MaterialTheme.typography.labelLarge,
-            fontSize = 32.sp,
+            fontSize = 34.sp,
             modifier = Modifier
                 .padding(horizontal = 10.dp)
         )
 
         Text(
             text = message,
-            fontSize = 18.sp
+            fontSize = 15.sp
         )
     }
 }
@@ -73,14 +75,14 @@ fun WeatherDetails(
     time: String
 ){
     Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
+        horizontalArrangement = Arrangement.SpaceAround,
         modifier =  Modifier
             .fillMaxWidth()
             .padding(10.dp)
     ) {
-        RowIconText(icon = R.drawable.air, text = speed, 34, 26)
-        RowIconText(icon = R.drawable.humidilty, text = humidity, 34, 26)
-        RowIconText(icon = R.drawable.sunny, text = time, 34, 26)
+        RowIconText(icon = R.drawable.air, text = speed)
+        RowIconText(icon = R.drawable.humidilty, text = humidity)
+        RowIconText(icon = R.drawable.sunny, text = time)
     }
 }
 
