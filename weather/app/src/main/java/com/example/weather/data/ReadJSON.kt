@@ -1,7 +1,6 @@
 package com.example.weather.data
 
 import android.content.Context
-import android.util.Log
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -17,8 +16,7 @@ fun ReadJSON(context: Context, path: String): String{
             }
         }
 
-        val jsonString = stringBuilder.toString()
-        return jsonString
+        return stringBuilder.toString()
     } catch (e: Exception) {
         e.printStackTrace()
         return ""

@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.weather.data.ReadJSON
 import com.example.weather.data.WeatherData
 import com.google.gson.GsonBuilder
@@ -15,6 +16,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.text.SimpleDateFormat
 import java.util.Date
+
+class WeatherViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(WeatherViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return WeatherViewModel(context) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
 
 class WeatherViewModel(
     private val context: Context

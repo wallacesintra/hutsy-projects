@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weather.components.HourlyForecast
 import com.example.weather.data.ReadJSON
 import com.example.weather.data.WeatherData
@@ -27,15 +29,15 @@ import java.util.Date
 class MainActivity : ComponentActivity() {
 //    private val viewModel by viewModels<WeatherViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
-        val jsonString = ReadJSON(baseContext, "data.json")
-        val gson = GsonBuilder()
-            .registerTypeAdapter(Date::class.java, JsonDeserializer<Date> { json, _, _ ->
-                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                return@JsonDeserializer sdf.parse(json.asString)
-            })
-            .create()
-
-        val data = gson.fromJson(jsonString, WeatherData::class.java)
+//        val jsonString = ReadJSON(baseContext, "data.json")
+//        val gson = GsonBuilder()
+//            .registerTypeAdapter(Date::class.java, JsonDeserializer<Date> { json, _, _ ->
+//                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+//                return@JsonDeserializer sdf.parse(json.asString)
+//            })
+//            .create()
+//
+//        val data = gson.fromJson(jsonString, WeatherData::class.java)
 
         super.onCreate(savedInstanceState)
         setContent {
@@ -47,15 +49,16 @@ class MainActivity : ComponentActivity() {
                 ) {
 //                    val uiState by viewModel.uiState.collectAsState()
 //                    Greeting(uiState.place)
+                    Container()
 //                    CurrentScreen(state = uiState)
-                    if (data != null) {
-//                        Text(text = data.list[0].main.feels_like.toString())
-                        HourlyForecast(list = data.list)
-                    } else {
-                        Text(text = "Data is null")
-                   }
+//                    if (data != null) {
+////                        Text(text = data.list[0].main.feels_like.toString())
+//                        HourlyForecast(list = data.list)
+//                    } else {
+//                        Text(text = "Data is null")
+//                   }
 
-                    }
+                }
             }
         }
     }
@@ -67,6 +70,19 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         text = "Hello $name!",
         modifier = modifier
     )
+}
+
+@Composable
+fun Container(
+    weatherViewModel: WeatherViewModel = viewModel()
+){
+    val context = LocalContext.current
+    val viewModel: WeatherViewModel = viewModel(
+        factory = WeatherViewModelFactory(context)
+    )
+//    val uiState by weatherViewModel.uiState.collectAsState()
+    val state by viewModel.uiState.collectAsState()
+    CurrentScreen(state = state)
 }
 
 @Preview(showBackground = true)
