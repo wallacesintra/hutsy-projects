@@ -33,11 +33,13 @@ class WeatherViewModel(
     private val  _uiState = MutableStateFlow(CurrentWeatherUiState())
     val uiState: StateFlow<CurrentWeatherUiState> = _uiState.asStateFlow()
 
+
     private fun loadData(){
         val jsonString = ReadJSON(context, "data.json")
         val gson = GsonBuilder()
             .registerTypeAdapter(Date::class.java, JsonDeserializer<Date> { json,_,_ ->
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+//                val sdf = SimpleDateFormat("hh")
                 return@JsonDeserializer sdf.parse(json.asString)
             })
             .create()
@@ -48,9 +50,9 @@ class WeatherViewModel(
             currentState.copy(
                 place = data.city.name,
                 country = data.city.country,
-                temp = data.list[0].main.temp.toString(),
+                temp = data.list[0].main.temp.toInt().toString(),
                 message = data.list[0].weather[0].description,
-                windSpeed = data.list[0].wind.speed.toString(),
+                windSpeed = data.list[0].wind.speed.toInt().toString(),
                 humidity = data.list[0].main.humidity.toString(),
                 hourlyForecast = data.list
             )

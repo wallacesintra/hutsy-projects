@@ -46,6 +46,7 @@ data class WeatherData(
             val humidity: Int,
             val temp_kf: Float
         )
+
         data class Weather(
             val id: Int,
             val main: String,

@@ -19,11 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather.R
 import com.example.weather.data.WeatherData
+import java.text.SimpleDateFormat
 
 @Composable
 fun HourlyForecast(
     list: List<WeatherData.WeatherDetails>
 ){
+    val dateFormat = SimpleDateFormat("HH a")
+
     Column (
         Modifier
             .fillMaxWidth()
@@ -36,20 +39,24 @@ fun HourlyForecast(
         ){
             Icon(
                 painter = painterResource(id = R.drawable.schedule),
-                contentDescription = "hourly forecast",
+                contentDescription = "Next forecast",
                 modifier = Modifier.padding(4.dp)
             )
 
             Text(
-                text = "Hourly Forecast",
+                text = "Forecast",
                 style = MaterialTheme.typography.labelLarge,
                 fontSize = 18.sp
             )
         }
 
         LazyRow {
-            items(list){item ->
-                ColumnIconText(icon = R.drawable.snow, text1 = item.dt_txt.toString(), text2 = item.main.temp.toString())
+            items(items = list.take(9)) { item ->
+                ColumnIconText(
+                    iconName = item.weather[0].main,
+                    text1 = dateFormat.format(item.dt_txt),
+                    text2 = "${item.main.temp.toInt().toString()}\u00B0"
+                )
             }
         }
     }

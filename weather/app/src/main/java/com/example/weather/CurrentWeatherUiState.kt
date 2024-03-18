@@ -9,5 +9,5 @@ data class CurrentWeatherUiState (
     val message: String = "",
     val windSpeed: String = "",
     val humidity: String = "",
-    val hourlyForecast: List<WeatherData.WeatherDetails>? = null
+    val hourlyForecast: List<WeatherData.WeatherDetails> = listOf()
 )

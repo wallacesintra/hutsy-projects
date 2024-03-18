@@ -27,18 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 class MainActivity : ComponentActivity() {
-//    private val viewModel by viewModels<WeatherViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
-//        val jsonString = ReadJSON(baseContext, "data.json")
-//        val gson = GsonBuilder()
-//            .registerTypeAdapter(Date::class.java, JsonDeserializer<Date> { json, _, _ ->
-//                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-//                return@JsonDeserializer sdf.parse(json.asString)
-//            })
-//            .create()
-//
-//        val data = gson.fromJson(jsonString, WeatherData::class.java)
-
         super.onCreate(savedInstanceState)
         setContent {
             WeatherTheme {
@@ -47,17 +36,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    val uiState by viewModel.uiState.collectAsState()
-//                    Greeting(uiState.place)
                     Container()
-//                    CurrentScreen(state = uiState)
-//                    if (data != null) {
-////                        Text(text = data.list[0].main.feels_like.toString())
-//                        HourlyForecast(list = data.list)
-//                    } else {
-//                        Text(text = "Data is null")
-//                   }
-
                 }
             }
         }
@@ -73,14 +52,11 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Container(
-    weatherViewModel: WeatherViewModel = viewModel()
-){
+fun Container(){
     val context = LocalContext.current
     val viewModel: WeatherViewModel = viewModel(
         factory = WeatherViewModelFactory(context)
     )
-//    val uiState by weatherViewModel.uiState.collectAsState()
     val state by viewModel.uiState.collectAsState()
     CurrentScreen(state = state)
 }
