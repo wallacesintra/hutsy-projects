@@ -19,6 +19,8 @@ import com.example.weather.components.HourlyForecast
 import com.example.weather.data.ReadJSON
 import com.example.weather.data.WeatherData
 import com.example.weather.screens.CurrentScreen
+import com.example.weather.screens.ForecastItem
+import com.example.weather.screens.ForecastScreen
 import com.example.weather.ui.theme.WeatherTheme
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -36,7 +38,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Container()
+//                    Container()
+//                    ForecastItem()
+                    ForecastContainer()
                 }
             }
         }
@@ -59,6 +63,16 @@ fun Container(){
     )
     val state by viewModel.uiState.collectAsState()
     CurrentScreen(state = state)
+}
+
+@Composable
+fun ForecastContainer(){
+    val context = LocalContext.current
+    val viewModel: WeatherViewModel = viewModel(
+        factory = WeatherViewModelFactory(context)
+    )
+    val state by viewModel.uiState.collectAsState()
+    ForecastScreen(list = state.hourlyForecast)
 }
 
 @Preview(showBackground = true)

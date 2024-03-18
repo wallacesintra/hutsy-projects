@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 class WeatherViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -38,7 +39,7 @@ class WeatherViewModel(
         val jsonString = ReadJSON(context, "data.json")
         val gson = GsonBuilder()
             .registerTypeAdapter(Date::class.java, JsonDeserializer<Date> { json,_,_ ->
-                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 //                val sdf = SimpleDateFormat("hh")
                 return@JsonDeserializer sdf.parse(json.asString)
             })

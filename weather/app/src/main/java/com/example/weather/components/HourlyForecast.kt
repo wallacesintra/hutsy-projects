@@ -20,12 +20,13 @@ import androidx.compose.ui.unit.sp
 import com.example.weather.R
 import com.example.weather.data.WeatherData
 import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun HourlyForecast(
     list: List<WeatherData.WeatherDetails>
 ){
-    val dateFormat = SimpleDateFormat("HH a")
+    val dateFormat = SimpleDateFormat("HH a", Locale.getDefault())
 
     Column (
         Modifier

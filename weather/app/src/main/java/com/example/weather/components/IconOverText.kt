@@ -46,7 +46,7 @@ fun IconOverText(
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .size(120.dp)
+                .size(130.dp)
                 .shadow(
                     elevation = 0.001.dp,
                 )
