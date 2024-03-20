@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,28 +37,34 @@ import java.util.Locale
 fun ForecastScreen(
     list: List<WeatherData.WeatherDetails>
 ){
-    LazyColumn {
-        items(list) {item ->
-            ForecastItem(item = item)
+    Column {
+        Text(
+            text = "Next 5 days",
+            fontSize = 22.sp,
+            modifier = Modifier.padding(8.dp)
+        )
+
+        LazyColumn {
+            items(list) {item ->
+                ForecastItem(item = item)
+            }
         }
     }
-}
 
+}
 @Composable
 fun ForecastItem(
     item: WeatherData.WeatherDetails
 ){
-    val dateFormat = SimpleDateFormat("E, hh a", Locale.getDefault())
+    val dayFormat = SimpleDateFormat("E,", Locale.getDefault())
+    val hourFormat = SimpleDateFormat("hha", Locale.getDefault())
     val icon = drawableMap[item.weather[0].main] ?: R.drawable.ic_launcher_foreground
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
+            .padding(8.dp)
     ) {
-        Text(
-            text = dateFormat.format(item.dt_txt),
-            fontSize = 22.sp
-        )
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -68,7 +76,6 @@ fun ForecastItem(
                     .size(height = 80.dp, width = 100.dp)
                     .zIndex(2f)
             )
-
             Card(
                 modifier = Modifier
                     .height(80.dp)
@@ -76,7 +83,7 @@ fun ForecastItem(
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .align(Alignment.Start)
@@ -85,16 +92,27 @@ fun ForecastItem(
                 ) {
                     Column {
                         Text(
+                            text = dayFormat.format(item.dt_txt)
+                        )
+                        Text(
+                            text = hourFormat.format(item.dt_txt)
+                        )
+                    }
+                    Spacer(modifier = Modifier.fillMaxWidth(0.25f))
+                    Column {
+                        Text(
                             text = item.weather[0].description,
                             style = MaterialTheme.typography.labelLarge,
                             fontSize = 15.sp
                         )
                         Text(
-                            text = item.main.temp.toInt().toString(),
+                            text = "${item.main.temp.toInt().toString()}°",
                             style = MaterialTheme.typography.labelLarge,
-                            fontSize = 40.sp
+                            fontSize = 40.sp,
+                            fontFamily = FontFamily.Serif
                         )
                     }
+
                 }
             }
         }

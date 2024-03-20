@@ -26,7 +26,7 @@ import java.util.Locale
 fun HourlyForecast(
     list: List<WeatherData.WeatherDetails>
 ){
-    val dateFormat = SimpleDateFormat("HH a", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("hha", Locale.getDefault())
 
     Column (
         Modifier

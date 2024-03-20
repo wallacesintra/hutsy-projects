@@ -3,9 +3,14 @@ package com.example.weather
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,22 +18,24 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.weather.components.HourlyForecast
-import com.example.weather.data.ReadJSON
-import com.example.weather.data.WeatherData
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.weather.components.TitleBar
 import com.example.weather.screens.CurrentScreen
-import com.example.weather.screens.ForecastItem
 import com.example.weather.screens.ForecastScreen
+import com.example.weather.screens.Screen
+import com.example.weather.screens.items
 import com.example.weather.ui.theme.WeatherTheme
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -38,9 +45,46 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Container()
-//                    ForecastItem()
-                    ForecastContainer()
+                    val navController = rememberNavController()
+                    Scaffold(
+                        topBar = {
+                                 TitleBar()
+                        },
+                        bottomBar = {
+                            BottomNavigation(
+                                backgroundColor = MaterialTheme.colorScheme.primaryContainer
+                            ) {
+                                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                                val currentDestination = navBackStackEntry?.destination
+                                
+                                items.forEach {screen ->
+                                    BottomNavigationItem(
+                                        selected = currentDestination?.hierarchy?.any {it.route == screen.route} == true,
+                                        onClick = {
+                                                  navController.navigate(screen.route){
+                                                      popUpTo(navController.graph.findStartDestination().id){
+                                                          saveState = true
+                                                      }
+                                                      launchSingleTop = true
+                                                      restoreState = true
+                                                  }
+                                        },
+                                        icon = { Icon(painter = painterResource(id = screen.icon), contentDescription = null )})
+                                }
+                            }
+                        }
+
+                    ) {paddingValues ->
+                        NavHost(
+                            navController = navController,
+                            startDestination = Screen.Current.route,
+                            modifier = Modifier.padding(paddingValues)
+                            ) {
+                            composable(Screen.Current.route) { CurrentContainer() }
+                            composable(Screen.Forecast.route) { ForecastContainer() }
+                        }
+                    }
+
                 }
             }
         }
@@ -56,7 +100,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Container(){
+fun CurrentContainer(){
     val context = LocalContext.current
     val viewModel: WeatherViewModel = viewModel(
         factory = WeatherViewModelFactory(context)
