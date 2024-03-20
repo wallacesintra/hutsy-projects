@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                         },
                         bottomBar = {
                             BottomNavigation(
-                                backgroundColor = MaterialTheme.colorScheme.primaryContainer
+                                backgroundColor = MaterialTheme.colorScheme.secondaryContainer
                             ) {
                                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                                 val currentDestination = navBackStackEntry?.destination

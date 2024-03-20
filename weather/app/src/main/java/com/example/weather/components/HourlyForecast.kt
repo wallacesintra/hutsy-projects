@@ -47,7 +47,7 @@ fun HourlyForecast(
             Text(
                 text = "Forecast",
                 style = MaterialTheme.typography.labelLarge,
-                fontSize = 18.sp
+                fontSize = 22.sp
             )
         }
 
