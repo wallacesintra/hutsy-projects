@@ -24,7 +24,7 @@ fun TitleBar(){
             .padding(20.dp)
     ) {
         Text(
-            text = "Weather Now",
+            text = "WeatherNow",
 //            fontFamily = FontFamily.Serif,
             fontSize = 24.sp,
 //            fontStyle = MaterialTheme.typography.headlineLarge
