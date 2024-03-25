@@ -1,4 +1,4 @@
-package com.example.weather.screens
+package com.example.weather.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.weather.R
-import com.example.weather.components.drawableMap
+import com.example.weather.presentation.components.drawableMap
 import com.example.weather.data.WeatherData
 import java.text.SimpleDateFormat
 import java.util.Locale

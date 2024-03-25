@@ -27,12 +27,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.weather.components.TitleBar
-import com.example.weather.screens.CurrentScreen
-import com.example.weather.screens.ForecastScreen
-import com.example.weather.screens.Screen
-import com.example.weather.screens.items
-import com.example.weather.ui.theme.WeatherTheme
+import com.example.weather.presentation.components.TitleBar
+import com.example.weather.presentation.screens.CurrentScreen
+import com.example.weather.presentation.screens.ForecastScreen
+import com.example.weather.presentation.screens.Screen
+import com.example.weather.presentation.screens.items
+import com.example.weather.presentation.viewmodel.WeatherViewModel
+import com.example.weather.presentation.viewmodel.WeatherViewModelFactory
+import com.example.weather.presentation.design_system.theme.WeatherTheme
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -52,12 +54,12 @@ class MainActivity : ComponentActivity() {
                         },
                         bottomBar = {
                             BottomNavigation(
-                                backgroundColor = MaterialTheme.colorScheme.secondaryContainer
+                                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                             ) {
                                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                                 val currentDestination = navBackStackEntry?.destination
                                 
-                                items.forEach {screen ->
+                                items.forEach { screen ->
                                     BottomNavigationItem(
                                         selected = currentDestination?.hierarchy?.any {it.route == screen.route} == true,
                                         onClick = {

@@ -1,4 +1,4 @@
-package com.example.weather.screens
+package com.example.weather.presentation.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,10 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.weather.CurrentWeatherUiState
-import com.example.weather.components.CityDetails
-import com.example.weather.components.HourlyForecast
-import com.example.weather.components.WeatherDetails
+import com.example.weather.presentation.components.CityDetails
+import com.example.weather.presentation.components.HourlyForecast
+import com.example.weather.presentation.components.WeatherDetails
+import com.example.weather.presentation.models.CurrentWeatherUiState
 
 @Composable
 fun CurrentScreen(

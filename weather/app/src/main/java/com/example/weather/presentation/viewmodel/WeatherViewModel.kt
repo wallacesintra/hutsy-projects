@@ -1,13 +1,11 @@
-package com.example.weather
+package com.example.weather.presentation.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weather.data.ReadJSON
 import com.example.weather.data.WeatherData
+import com.example.weather.presentation.models.CurrentWeatherUiState
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,5 @@
-package com.example.weather
+package com.example.weather.presentation.models
+
 
 import com.example.weather.data.WeatherData
 
