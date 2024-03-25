@@ -30,8 +30,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.weather.presentation.components.TitleBar
 import com.example.weather.presentation.screens.CurrentScreen
 import com.example.weather.presentation.screens.ForecastScreen
-import com.example.weather.presentation.screens.Screen
-import com.example.weather.presentation.screens.items
+import com.example.weather.presentation.navigation.Screen
+import com.example.weather.presentation.navigation.items
 import com.example.weather.presentation.viewmodel.WeatherViewModel
 import com.example.weather.presentation.viewmodel.WeatherViewModelFactory
 import com.example.weather.presentation.design_system.theme.WeatherTheme

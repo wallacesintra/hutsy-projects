@@ -1,4 +1,4 @@
-package com.example.weather.presentation.screens
+package com.example.weather.presentation.navigation
 
 import androidx.annotation.DrawableRes
 import com.example.weather.R
