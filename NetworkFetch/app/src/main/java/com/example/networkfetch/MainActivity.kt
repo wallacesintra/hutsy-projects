@@ -43,7 +43,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun Container(){
-    val viewModel: MarsViewModel = viewModel()
+    val viewModel: MarsViewModel = viewModel(factory = MarsViewModel.Factory)
     HomeScreen(marsUiState = viewModel.marsUiState)
 }
 
