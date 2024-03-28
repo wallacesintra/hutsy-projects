@@ -1,4 +1,4 @@
-package com.example.weather.presentation.viewmodel
+package com.example.weather.presentation.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.weather.WeatherApplication
 import com.example.weather.data.WeatherDataRepository
+import com.example.weather.presentation.models.CurrentWeatherUiState
 import com.example.weather.presentation.models.WeatherState
 import kotlinx.coroutines.launch
 import okio.IOException
@@ -28,8 +29,18 @@ class OpenWeatherViewModel(
     private fun getWeatherData(){
         viewModelScope.launch {
             weatherState = WeatherState.Loading
+            val weatherData = weatherDataRepository.getWeatherData()
             weatherState = try {
-                WeatherState.Success(weatherDataRepository.getWeatherData())
+                WeatherState.Success(
+                    weatherUiState =CurrentWeatherUiState(
+                        place = weatherData.city.name,
+                        country = weatherData.city.country,
+                        temp = weatherData.list[0].main.temp.toInt().toString(),
+                        windSpeed = weatherData.list[0].wind.speed.toInt().toString(),
+                        humidity = weatherData.list[0].main.humidity.toString(),
+                        hourlyForecast = weatherData.list
+                    )
+                )
             } catch (e: IOException) {
                 WeatherState.Error
             }

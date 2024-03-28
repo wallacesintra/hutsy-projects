@@ -23,6 +23,7 @@ fun CityDetails(
     message: String
 ) {
     val icon = drawableMap[iconName] ?: R.drawable.ic_launcher_foreground
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,

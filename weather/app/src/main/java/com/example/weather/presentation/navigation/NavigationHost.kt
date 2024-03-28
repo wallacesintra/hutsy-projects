@@ -7,10 +7,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -20,13 +18,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.weather.presentation.components.TitleBar
+import com.example.weather.presentation.models.WeatherState
 import com.example.weather.presentation.screens.CurrentScreen
+import com.example.weather.presentation.screens.ErrorScreen
 import com.example.weather.presentation.screens.ForecastScreen
-import com.example.weather.presentation.viewmodel.WeatherViewModel
-import com.example.weather.presentation.viewmodel.WeatherViewModelFactory
+import com.example.weather.presentation.screens.LoadingScreen
+import com.example.weather.presentation.viewmodels.OpenWeatherViewModel
 
 @Composable
 fun NavigationHost(){
+    val weatherViewModel: OpenWeatherViewModel = viewModel(factory = OpenWeatherViewModel.Factory)
+    val uiState = weatherViewModel.weatherState
     val navController = rememberNavController()
     Scaffold(
         topBar = {
@@ -51,7 +53,7 @@ fun NavigationHost(){
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(painter = painterResource(id = screen.icon), contentDescription = null ) })
+                        icon = { Icon(painter = painterResource(id = screen.icon!!), contentDescription = null ) })
                 }
             }
         }
@@ -62,28 +64,34 @@ fun NavigationHost(){
             startDestination = Screen.Current.route,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(Screen.Current.route) { CurrentContainer() }
-            composable(Screen.Forecast.route) { ForecastContainer() }
+            composable(Screen.Current.route) { CurrentContainer(uiState) }
+            composable(Screen.Forecast.route) { ForecastContainer(uiState) }
+            composable(Screen.Loading.route){ LoadingScreen()}
+            composable(Screen.Error.route) { ErrorScreen()}
         }
     }
 }
 
 @Composable
-fun CurrentContainer(){
-    val context = LocalContext.current
-    val viewModel: WeatherViewModel = viewModel(
-        factory = WeatherViewModelFactory(context)
-    )
-    val state by viewModel.uiState.collectAsState()
-    CurrentScreen(state = state)
+fun CurrentContainer(
+    uiState: WeatherState
+){
+    when(uiState){
+        is WeatherState.Loading -> LoadingScreen()
+        is WeatherState.Success -> CurrentScreen(state = uiState.weatherUiState)
+        else -> {ErrorScreen()}
+    }
 }
 
+
+
 @Composable
-fun ForecastContainer(){
-    val context = LocalContext.current
-    val viewModel: WeatherViewModel = viewModel(
-        factory = WeatherViewModelFactory(context)
-    )
-    val state by viewModel.uiState.collectAsState()
-    ForecastScreen(list = state.hourlyForecast)
+fun ForecastContainer(
+    uiState: WeatherState
+){
+    when(uiState){
+        is WeatherState.Loading -> LoadingScreen()
+        is WeatherState.Success -> ForecastScreen(list = uiState.weatherUiState.hourlyForecast)
+        else -> {ErrorScreen()}
+    }
 }

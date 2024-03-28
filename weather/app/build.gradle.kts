@@ -1,7 +1,18 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
+}
+
+val localPropertiesFile = rootProject.file("local.properties")
+val localProperties = Properties().apply {
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { stream ->
+            load(stream)
+        }
+    }
 }
 
 android {
@@ -15,6 +26,18 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+//        val keyStoreFile = project.rootProject.file("apikeys.properties")
+//        val properties = Properties()
+//        properties.load(keyStoreFile.inputStream())
+//
+//        val apiKey = properties.getProperty("API_KEY ") ?: ""
+//
+//        buildConfigField(
+//            type = "String",
+//            name = "API_KEY",
+//            value = apiKey
+//        )
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -24,11 +47,24 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+
         }
+
+        getByName("debug") {
+            buildConfigField(
+                "String",
+                "API_KEY",
+                localProperties.getProperty("API_KEY")
+            )
+        }
+
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -39,6 +75,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"

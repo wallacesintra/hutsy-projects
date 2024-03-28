@@ -26,21 +26,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.weather.R
+import com.example.weather.network.OpenWeatherData
 import com.example.weather.presentation.components.drawableMap
-import com.example.weather.data.demo.WeatherData
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
 fun ForecastScreen(
-    list: List<WeatherData.WeatherDetails>
+    list: List<OpenWeatherData.WeatherList>
 ){
     Column {
         Text(
             text = "Next 5 days",
             fontSize = 22.sp,
-//            fontStyle = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .padding(8.dp)
         )
 
         LazyColumn {
@@ -53,10 +53,12 @@ fun ForecastScreen(
 }
 @Composable
 fun ForecastItem(
-    item: WeatherData.WeatherDetails
+    item: OpenWeatherData.WeatherList
 ){
-    val dayFormat = SimpleDateFormat("E,", Locale.getDefault())
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val hourFormat = SimpleDateFormat("hha", Locale.getDefault())
+    val dayFormat = SimpleDateFormat("E,", Locale.getDefault())
+
     val icon = drawableMap[item.weather[0].main] ?: R.drawable.ic_launcher_foreground
     Column(
         verticalArrangement = Arrangement.Center,
@@ -89,12 +91,17 @@ fun ForecastItem(
                         .fillMaxWidth(0.95f)
                         .padding(8.dp)
                 ) {
+                    val date = inputFormat.parse(item.dtTxt)
+
+                    val dayTime = if (date != null) dayFormat.format(date) else "Invalid date"
+                    val hourTime = if (date != null) hourFormat.format(date) else "Invalid time"
+
                     Column {
                         Text(
-                            text = dayFormat.format(item.dt_txt)
+                            text = dayTime
                         )
                         Text(
-                            text = hourFormat.format(item.dt_txt)
+                            text = hourTime
                         )
                     }
                     Spacer(modifier = Modifier.fillMaxWidth(0.25f))
@@ -105,7 +112,7 @@ fun ForecastItem(
                             fontSize = 15.sp
                         )
                         Text(
-                            text = "${item.main.temp.toInt().toString()}°",
+                            text = "${item.main.temp.toInt()}°",
                             style = MaterialTheme.typography.labelLarge,
                             fontSize = 40.sp,
                             fontFamily = FontFamily.Serif

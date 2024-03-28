@@ -19,14 +19,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather.R
 import com.example.weather.data.demo.WeatherData
+import com.example.weather.network.OpenWeatherData
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
 fun HourlyForecast(
-    list: List<WeatherData.WeatherDetails>
+    list: List<OpenWeatherData.WeatherList>
 ){
-    val dateFormat = SimpleDateFormat("hha", Locale.getDefault())
+//    val dateFormat = SimpleDateFormat("hha", Locale.getDefault())
+
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("hha", Locale.getDefault())
 
     Column (
         Modifier
@@ -53,10 +57,14 @@ fun HourlyForecast(
 
         LazyRow {
             items(items = list.take(9)) { item ->
+                val date = inputFormat.parse(item.dtTxt)
+                val formattedDate = if (date != null) outputFormat.format(date) else "Invalid date"
+
                 ColumnIconText(
                     iconName = item.weather[0].main,
-                    text1 = dateFormat.format(item.dt_txt),
-                    text2 = "${item.main.temp.toInt().toString()}\u00B0"
+//                    text1 = dateFormat.format(item.dtTxt),
+                    text1 = formattedDate,
+                    text2 = "${item.main.temp.toInt()}\u00B0"
                 )
             }
         }
