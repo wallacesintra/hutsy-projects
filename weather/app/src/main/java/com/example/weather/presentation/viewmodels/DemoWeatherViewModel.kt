@@ -1,4 +1,4 @@
-package com.example.weather.presentation.viewmodel
+package com.example.weather.presentation.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -53,7 +53,7 @@ class WeatherViewModel(
                 message = data.list[0].weather[0].description,
                 windSpeed = data.list[0].wind.speed.toInt().toString(),
                 humidity = data.list[0].main.humidity.toString(),
-                hourlyForecast = data.list
+//                hourlyForecast = data.list
             )
         }
     }
