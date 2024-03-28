@@ -1,7 +1,7 @@
 package com.example.weather.presentation.models
 
 
-import com.example.weather.data.WeatherData
+import com.example.weather.data.demo.WeatherData
 
 data class CurrentWeatherUiState (
     val place: String = "",

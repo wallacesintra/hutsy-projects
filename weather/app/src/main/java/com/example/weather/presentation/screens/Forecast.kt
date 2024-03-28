@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.weather.R
 import com.example.weather.presentation.components.drawableMap
-import com.example.weather.data.WeatherData
+import com.example.weather.data.demo.WeatherData
 import java.text.SimpleDateFormat
 import java.util.Locale
 
