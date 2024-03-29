@@ -18,17 +18,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.weather.presentation.components.TitleBar
+import com.example.weather.presentation.models.CityState
+import com.example.weather.presentation.models.CityUiState
 import com.example.weather.presentation.models.WeatherState
+import com.example.weather.presentation.screens.CityScreen
 import com.example.weather.presentation.screens.CurrentScreen
 import com.example.weather.presentation.screens.ErrorScreen
 import com.example.weather.presentation.screens.ForecastScreen
 import com.example.weather.presentation.screens.LoadingScreen
+import com.example.weather.presentation.viewmodels.CityViewModel
 import com.example.weather.presentation.viewmodels.OpenWeatherViewModel
 
 @Composable
 fun NavigationHost(){
     val weatherViewModel: OpenWeatherViewModel = viewModel(factory = OpenWeatherViewModel.Factory)
     val uiState = weatherViewModel.weatherState
+
+    val cityViewModel: CityViewModel = viewModel(factory = CityViewModel.Factory)
+    val cityUiState = cityViewModel.cityState
+
     val navController = rememberNavController()
     Scaffold(
         topBar = {
@@ -66,6 +74,7 @@ fun NavigationHost(){
         ) {
             composable(Screen.Current.route) { CurrentContainer(uiState) }
             composable(Screen.Forecast.route) { ForecastContainer(uiState) }
+            composable(Screen.City.route) { CityContainer(uiState = cityUiState)}
             composable(Screen.Loading.route){ LoadingScreen()}
             composable(Screen.Error.route) { ErrorScreen()}
         }
@@ -94,4 +103,16 @@ fun ForecastContainer(
         is WeatherState.Success -> ForecastScreen(list = uiState.weatherUiState.hourlyForecast)
         else -> {ErrorScreen()}
     }
+}
+
+@Composable
+fun CityContainer(
+    uiState: CityState
+){
+    when(uiState){
+        is CityState.Loading -> LoadingScreen()
+        is CityState.Success -> CityScreen(state = uiState.cityUiState)
+        else -> ErrorScreen()
+    }
+
 }

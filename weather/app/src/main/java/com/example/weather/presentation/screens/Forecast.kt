@@ -26,14 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.weather.R
-import com.example.weather.network.OpenWeatherData
+import com.example.weather.network.dto.CurrentWeatherData
 import com.example.weather.presentation.components.drawableMap
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
 fun ForecastScreen(
-    list: List<OpenWeatherData.WeatherList>
+    list: List<CurrentWeatherData.WeatherList>
 ){
     Column {
         Text(
@@ -53,7 +53,7 @@ fun ForecastScreen(
 }
 @Composable
 fun ForecastItem(
-    item: OpenWeatherData.WeatherList
+    item: CurrentWeatherData.WeatherList
 ){
     val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val hourFormat = SimpleDateFormat("hha", Locale.getDefault())

@@ -1,14 +1,14 @@
 package com.example.weather.data
 
 import com.example.weather.network.OpenWeatherApiService
-import com.example.weather.network.OpenWeatherData
+import com.example.weather.network.dto.CurrentWeatherData
 
 interface WeatherDataRepository {
-    suspend fun getWeatherData(): OpenWeatherData
+    suspend fun getWeatherData(): CurrentWeatherData
 }
 
 class NetworkWeatherDataRepository(
     private val openWeatherApiService: OpenWeatherApiService
 ): WeatherDataRepository{
-    override suspend fun getWeatherData(): OpenWeatherData = openWeatherApiService.getWeather()
+    override suspend fun getWeatherData(): CurrentWeatherData = openWeatherApiService.getWeather()
 }

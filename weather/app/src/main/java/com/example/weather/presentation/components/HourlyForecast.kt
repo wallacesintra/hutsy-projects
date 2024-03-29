@@ -18,16 +18,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather.R
-import com.example.weather.data.demo.WeatherData
-import com.example.weather.network.OpenWeatherData
+import com.example.weather.network.dto.CurrentWeatherData
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
 fun HourlyForecast(
-    list: List<OpenWeatherData.WeatherList>
+    list: List<CurrentWeatherData.WeatherList>
 ){
-//    val dateFormat = SimpleDateFormat("hha", Locale.getDefault())
 
     val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val outputFormat = SimpleDateFormat("hha", Locale.getDefault())
@@ -62,7 +60,6 @@ fun HourlyForecast(
 
                 ColumnIconText(
                     iconName = item.weather[0].main,
-//                    text1 = dateFormat.format(item.dtTxt),
                     text1 = formattedDate,
                     text2 = "${item.main.temp.toInt()}\u00B0"
                 )

@@ -1,8 +1,7 @@
 package com.example.weather.presentation.models
 
 
-import com.example.weather.data.demo.WeatherData
-import com.example.weather.network.OpenWeatherData
+import com.example.weather.network.dto.CurrentWeatherData
 
 data class CurrentWeatherUiState (
     val place: String = "",
@@ -11,5 +10,5 @@ data class CurrentWeatherUiState (
     val message: String = "",
     val windSpeed: String = "",
     val humidity: String = "",
-    val hourlyForecast: List<OpenWeatherData.WeatherList> = listOf()
+    val hourlyForecast: List<CurrentWeatherData.WeatherList> = listOf()
 )

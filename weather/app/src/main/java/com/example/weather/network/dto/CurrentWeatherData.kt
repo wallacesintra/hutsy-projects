@@ -1,12 +1,11 @@
-package com.example.weather.network
+package com.example.weather.network.dto
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.text.DateFormat
 
 @Serializable
-data class OpenWeatherData (
+data class CurrentWeatherData (
     val cod: String,
     val cnt: Int,
     @Contextual val list: List<WeatherList>,

@@ -8,6 +8,7 @@ import retrofit2.Retrofit
 
 interface AppContainer {
     val weatherDataRepository: WeatherDataRepository
+    val cityWeatherDataRepository: CityWeatherDataRepository
 }
 
 class DefaultContainer: AppContainer {
@@ -26,5 +27,9 @@ class DefaultContainer: AppContainer {
 
     override val weatherDataRepository: WeatherDataRepository by lazy {
         NetworkWeatherDataRepository(retrofitService)
+    }
+
+    override val cityWeatherDataRepository: CityWeatherDataRepository by lazy {
+        NetworkCityWeatherDataRepository(retrofitService)
     }
 }
