@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.weather.presentation.design_system.theme.WeatherTheme
 import com.example.weather.presentation.navigation.NavigationHost
+import com.example.weather.presentation.screens.TestContainer
+import com.example.weather.presentation.screens.TestScreen
 import com.google.gson.internal.GsonBuildConfig
 
 class MainActivity : ComponentActivity() {
@@ -27,8 +29,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationHost()
-//                    TestContainer()
+//                    NavigationHost()
+                    TestContainer()
                 }
             }
         }

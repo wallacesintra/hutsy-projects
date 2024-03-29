@@ -22,6 +22,10 @@ class CityViewModel(
     var cityState: CityState by mutableStateOf(CityState.Loading)
         private set
 
+    init {
+        getCityWeatherData()
+    }
+
     private fun getCityWeatherData(){
         viewModelScope.launch {
             cityState = CityState.Loading
@@ -32,6 +36,7 @@ class CityViewModel(
                     cityUiState = CityUiState(
                         name = cityData.city.name,
                         country = cityData.city.country,
+                        temp = cityData.list[0].main.temp.toInt().toString(),
                         list = cityData.list
                     )
                 )
