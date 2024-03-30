@@ -14,5 +14,5 @@
 .cxx
 local.properties
 
-# keys
+# get api key from open weather api
 apikeys.properties
