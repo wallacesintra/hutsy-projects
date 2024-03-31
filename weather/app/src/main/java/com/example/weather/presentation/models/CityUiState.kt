@@ -6,5 +6,5 @@ data class CityUiState(
     val name: String = "",
     val country: String = "",
     val temp: String = "",
-    val list: List<WeatherList>
+    val list: List<WeatherList> = listOf()
 )

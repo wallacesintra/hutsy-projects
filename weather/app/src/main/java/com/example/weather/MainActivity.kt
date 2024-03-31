@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val api = BuildConfig.API_KEY
         setContent {
             WeatherTheme {
                 // A surface container using the 'background' color from the theme
@@ -29,8 +28,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    NavigationHost()
-                    TestContainer()
+                    NavigationHost()
+//                    TestContainer()
                 }
             }
         }

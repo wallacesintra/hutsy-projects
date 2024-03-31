@@ -10,14 +10,17 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.weather.WeatherApplication
+import com.example.weather.data.CityWeatherDataRepository
 import com.example.weather.data.WeatherDataRepository
+import com.example.weather.presentation.models.CityState
+import com.example.weather.presentation.models.CityUiState
 import com.example.weather.presentation.models.CurrentWeatherUiState
 import com.example.weather.presentation.models.WeatherState
 import kotlinx.coroutines.launch
 import okio.IOException
 
 class OpenWeatherViewModel(
-    private val weatherDataRepository: WeatherDataRepository
+    private val weatherDataRepository: WeatherDataRepository,
 ) : ViewModel() {
     var weatherState: WeatherState by mutableStateOf(WeatherState.Loading)
         private set

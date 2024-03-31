@@ -19,12 +19,13 @@ fun TestScreen(
 
 @Composable
 fun TestContainer(){
-    val weatherViewModel: OpenWeatherViewModel = viewModel(factory = OpenWeatherViewModel.Factory)
+//    val weatherViewModel: OpenWeatherViewModel = viewModel(factory = OpenWeatherViewModel.Factory)
     val cityViewModel: CityViewModel = viewModel(factory = CityViewModel.Factory)
 
-    val uiState = weatherViewModel.weatherState
+//    val uiState = weatherViewModel.weatherState
 
     val cityUiState = cityViewModel.cityState
+//    val cityUiState = weatherViewModel.cityState
 
     when (cityUiState) {
         is CityState.Loading -> TestLoadingScreen()

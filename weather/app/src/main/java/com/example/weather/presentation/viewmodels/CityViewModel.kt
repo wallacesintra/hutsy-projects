@@ -22,6 +22,12 @@ class CityViewModel(
     var cityState: CityState by mutableStateOf(CityState.Loading)
         private set
 
+    var isCityScreen: Boolean by mutableStateOf(false)
+
+    private fun changeToCity(){
+        isCityScreen = true
+    }
+
     init {
         getCityWeatherData()
     }

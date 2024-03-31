@@ -19,7 +19,7 @@ data class City(
 @Serializable
 data class WeatherList(
     @Contextual val main: Main,
-    @Contextual val weather: Weather
+    @Contextual val weather: List<Weather>
 )
 
 @Serializable

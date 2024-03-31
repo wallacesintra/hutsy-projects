@@ -3,6 +3,9 @@ package com.example.weather.presentation.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,11 +39,23 @@ fun NavigationHost(){
 
     val cityViewModel: CityViewModel = viewModel(factory = CityViewModel.Factory)
     val cityUiState = cityViewModel.cityState
+    var isCityScreen = cityViewModel.isCityScreen
 
     val navController = rememberNavController()
     Scaffold(
         topBar = {
             TitleBar()
+        },
+
+        floatingActionButton = {
+            if (isCityScreen){
+                FloatingActionButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "add location check its weather"
+                    )
+                }
+            }
         },
         bottomBar = {
             BottomNavigation(
@@ -74,7 +89,9 @@ fun NavigationHost(){
         ) {
             composable(Screen.Current.route) { CurrentContainer(uiState) }
             composable(Screen.Forecast.route) { ForecastContainer(uiState) }
-            composable(Screen.City.route) { CityContainer(uiState = cityUiState)}
+            composable(Screen.City.route) {
+                CityContainer(uiState = cityUiState)
+            }
             composable(Screen.Loading.route){ LoadingScreen()}
             composable(Screen.Error.route) { ErrorScreen()}
         }

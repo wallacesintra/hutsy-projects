@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.weather.R
 
 @Composable
@@ -45,19 +46,23 @@ fun CityComponent(
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = "weather icon",
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier
+                        .zIndex(2f)
+                        .size(60.dp)
+                        .align(Alignment.BottomEnd)
                 )
-
                 Text(
-                    text = temp,
+                    text = "$temp°",
                     fontFamily = FontFamily.Serif,
-                    fontSize = 70.sp,
-                    modifier = Modifier.align(Alignment.BottomStart)
+                    fontSize = 80.sp,
+                    modifier = Modifier
+                        .zIndex(1f)
+//                        .align(Alignment.BottomStart)
                 )
             }
             Text(
                 text = name,
-                fontSize = 24.sp
+                fontSize = 18.sp
             )
         }
 
