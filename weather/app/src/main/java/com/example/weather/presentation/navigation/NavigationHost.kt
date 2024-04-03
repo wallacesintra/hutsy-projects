@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.weather.presentation.components.TitleBar
+import com.example.weather.presentation.events.CityActions
 import com.example.weather.presentation.models.CityState
 import com.example.weather.presentation.models.CityUiState
 import com.example.weather.presentation.models.WeatherState
@@ -39,7 +40,6 @@ fun NavigationHost(){
 
     val cityViewModel: CityViewModel = viewModel(factory = CityViewModel.Factory)
     val cityUiState = cityViewModel.cityState
-    var isCityScreen = cityViewModel.isCityScreen
 
     val navController = rememberNavController()
     Scaffold(
@@ -47,16 +47,6 @@ fun NavigationHost(){
             TitleBar()
         },
 
-        floatingActionButton = {
-            if (isCityScreen){
-                FloatingActionButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "add location check its weather"
-                    )
-                }
-            }
-        },
         bottomBar = {
             BottomNavigation(
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -90,7 +80,10 @@ fun NavigationHost(){
             composable(Screen.Current.route) { CurrentContainer(uiState) }
             composable(Screen.Forecast.route) { ForecastContainer(uiState) }
             composable(Screen.City.route) {
-                CityContainer(uiState = cityUiState)
+//                CityContainer(uiState = cityUiState, actions = { cityViewModel.onAction(CityActions.Search("Nairobi"))})
+                CityScreen(cityState = cityUiState) {
+                    cityViewModel.onAction(CityActions.Search("nairobi"))
+                }
             }
             composable(Screen.Loading.route){ LoadingScreen()}
             composable(Screen.Error.route) { ErrorScreen()}
@@ -124,12 +117,13 @@ fun ForecastContainer(
 
 @Composable
 fun CityContainer(
-    uiState: CityState
+    uiState: CityState,
+    actions: (CityActions) -> Unit
 ){
-    when(uiState){
-        is CityState.Loading -> LoadingScreen()
-        is CityState.Success -> CityScreen(state = uiState.cityUiState)
-        else -> ErrorScreen()
-    }
+//    when(uiState){
+//        is CityState.Loading -> LoadingScreen()
+//        is CityState.Success -> CityScreen(state = uiState.cityUiState, onSearch =actions)
+//        else -> ErrorScreen()
+//    }
 
 }

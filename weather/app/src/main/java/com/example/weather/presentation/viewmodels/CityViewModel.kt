@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.weather.WeatherApplication
 import com.example.weather.data.CityWeatherDataRepository
+import com.example.weather.presentation.events.CityActions
 import com.example.weather.presentation.models.CityState
 import com.example.weather.presentation.models.CityUiState
 import kotlinx.coroutines.launch
@@ -22,33 +23,45 @@ class CityViewModel(
     var cityState: CityState by mutableStateOf(CityState.Loading)
         private set
 
-    var isCityScreen: Boolean by mutableStateOf(false)
-
-    private fun changeToCity(){
-        isCityScreen = true
-    }
 
     init {
-        getCityWeatherData()
+//        getCityWeatherData("alaska")
     }
 
-    private fun getCityWeatherData(){
+    fun onAction(action: CityActions) {
+        when(action){
+            is CityActions.Search -> getCityWeatherData(action.location)
+        }
+    }
+
+    private fun getCityWeatherData( location: String){
         viewModelScope.launch {
             cityState = CityState.Loading
-            val cityData = cityWeatherDataRepository.getCityWeatherData()
+            val cityData = cityWeatherDataRepository.getCityWeatherData(location)
 
-            cityState = try {
-                CityState.Success(
+            if (cityData.cod == "200"){
+                cityState = try {
+                    CityState.Success(
+                        cityUiState = CityUiState(
+                            name = cityData.city.name,
+                            country = cityData.city.country,
+                            temp = cityData.list[0].main.temp.toInt().toString(),
+                            found = true,
+                            list = cityData.list
+                        )
+                    )
+                } catch (e: IOException){
+                    CityState.Error
+                }
+            }
+            else {
+                cityState = CityState.Success(
                     cityUiState = CityUiState(
-                        name = cityData.city.name,
-                        country = cityData.city.country,
-                        temp = cityData.list[0].main.temp.toInt().toString(),
-                        list = cityData.list
+                        found = false
                     )
                 )
-            } catch (e: IOException){
-                CityState.Error
             }
+
         }
     }
     companion object{
