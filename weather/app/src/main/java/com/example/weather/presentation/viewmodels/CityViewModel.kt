@@ -1,5 +1,8 @@
 package com.example.weather.presentation.viewmodels
 
+import android.net.http.HttpException
+import android.nfc.Tag
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,6 +17,7 @@ import com.example.weather.data.CityWeatherDataRepository
 import com.example.weather.presentation.events.CityActions
 import com.example.weather.presentation.models.CityState
 import com.example.weather.presentation.models.CityUiState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -31,41 +35,34 @@ class CityViewModel(
     }
 
     fun searchLocation(){
-        getCityWeatherData(userLocation)
+        getLocationData(userLocation)
     }
 
-    fun onAction(action: CityActions) {
-        when(action){
-            is CityActions.Search -> getCityWeatherData(action.location)
-            else -> {}
-        }
-    }
 
-    private fun getCityWeatherData( location: String){
+    private fun getLocationData(location: String) {
         viewModelScope.launch {
-            cityState = CityState.Loading
-            val cityData = cityWeatherDataRepository.getCityWeatherData(location)
+            try {
+                cityState = CityState.Loading
+                val cityData = cityWeatherDataRepository.getCityWeatherData(location)
 
-            if (cityData.cod == "200"){
-                cityState = try {
-                    CityState.Success(
-                        cityUiState = CityUiState(
-                            name = cityData.city.name,
-                            country = cityData.city.country,
-                            temp = cityData.list[0].main.temp.toInt().toString(),
-                            found = true,
-                            list = cityData.list
-                        )
+                cityState = CityState.Success(
+                    cityUiState = CityUiState(
+                        name = cityData.city.name,
+                        country = cityData.city.country,
+                        temp = cityData.list[0].main.temp.toInt().toString(),
+                        found = true,
+                        mainWeather = cityData.list[0].weather[0].main
                     )
-                } catch (e: IOException){
-                    CityState.Error
-                }
-            }
-            else {
-                cityState = CityState.Unsuccess
+                )
+
+            } catch (e: Exception) {
+                cityState = CityState.Error
             }
         }
     }
+
+
+
     companion object{
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

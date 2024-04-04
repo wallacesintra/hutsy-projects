@@ -31,8 +31,8 @@ fun TestContainer(){
         is CityState.Loading -> TestLoadingScreen()
         is CityState.Error -> TestErrorScreen()
         is CityState.Success -> TestScreen(uiState = cityUiState.cityUiState)
-        CityState.Unsuccess -> {
-            Text(text = "Unsuccess")}
+//        CityState.Unsuccess -> {
+//            Text(text = "Unsuccess")}
     }
 }
 

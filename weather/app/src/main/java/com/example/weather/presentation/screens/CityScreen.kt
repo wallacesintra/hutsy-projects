@@ -67,19 +67,12 @@ fun CityScreen(
                 CityState.Error -> ErrorScreen()
                 CityState.Loading -> LoadingScreen()
                 is CityState.Success -> {
-                    if (cityState.cityUiState.found){
-                        CityComponent(
-                            iconName = cityState.cityUiState.list[0].weather[0].main,
-                            temp = cityState.cityUiState.temp,
-                            name = "${cityState.cityUiState.name}, ${cityState.cityUiState.country}"
-                        )
-                    } else {
-                        Text(text = "Location not found")
-                    }
-                }
-
-                CityState.Unsuccess -> {
-                    Text(text = "Location not found")
+                    CityComponent(
+//                        iconName = cityState.cityUiState.list[0].weather[0].main,
+                        iconName = cityState.cityUiState.mainWeather,
+                        temp = cityState.cityUiState.temp,
+                        name = "${cityState.cityUiState.name}, ${cityState.cityUiState.country}"
+                    )
                 }
             }
         }
