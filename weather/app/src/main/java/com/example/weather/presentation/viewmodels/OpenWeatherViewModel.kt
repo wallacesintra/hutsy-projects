@@ -10,10 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.weather.WeatherApplication
-import com.example.weather.data.CityWeatherDataRepository
 import com.example.weather.data.WeatherDataRepository
-import com.example.weather.presentation.models.CityState
-import com.example.weather.presentation.models.CityUiState
 import com.example.weather.presentation.models.CurrentWeatherUiState
 import com.example.weather.presentation.models.WeatherState
 import kotlinx.coroutines.launch
@@ -25,6 +22,9 @@ class OpenWeatherViewModel(
     var weatherState: WeatherState by mutableStateOf(WeatherState.Loading)
         private set
 
+    private val latitude = -1.286389
+    private val longitude = 36.817223
+
     init {
         getWeatherData()
     }
@@ -32,7 +32,7 @@ class OpenWeatherViewModel(
     private fun getWeatherData(){
         viewModelScope.launch {
             weatherState = WeatherState.Loading
-            val weatherData = weatherDataRepository.getWeatherData()
+            val weatherData = weatherDataRepository.getWeatherData(lat = latitude, lon = longitude)
             weatherState = try {
                 WeatherState.Success(
                     weatherUiState =CurrentWeatherUiState(

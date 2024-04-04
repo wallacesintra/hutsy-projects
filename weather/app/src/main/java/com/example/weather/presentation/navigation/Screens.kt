@@ -14,7 +14,7 @@ sealed class Screen(val route: String, val label: String, @DrawableRes val icon:
     object City: Screen("Cities", "Cities Screen", R.drawable.location)
 }
 
-val items = listOf(
+val Screens = listOf(
     Screen.Current,
     Screen.Forecast,
     Screen.City

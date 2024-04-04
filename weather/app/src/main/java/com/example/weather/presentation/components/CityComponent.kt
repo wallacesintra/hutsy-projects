@@ -47,7 +47,7 @@ fun CityComponent(
                     painter = painterResource(id = icon),
                     contentDescription = "weather icon",
                     modifier = Modifier
-                        .zIndex(2f)
+                        .zIndex(1f)
                         .size(60.dp)
                         .align(Alignment.BottomEnd)
                 )
@@ -56,7 +56,7 @@ fun CityComponent(
                     fontFamily = FontFamily.Serif,
                     fontSize = 80.sp,
                     modifier = Modifier
-                        .zIndex(1f)
+                        .zIndex(2f)
 //                        .align(Alignment.BottomStart)
                 )
             }

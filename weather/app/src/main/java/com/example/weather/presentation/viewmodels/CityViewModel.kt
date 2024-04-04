@@ -23,14 +23,21 @@ class CityViewModel(
     var cityState: CityState by mutableStateOf(CityState.Loading)
         private set
 
+    var userLocation: String by mutableStateOf("")
+        private set
 
-    init {
-//        getCityWeatherData("alaska")
+    fun onLocationChange(location: String){
+        userLocation = location
+    }
+
+    fun searchLocation(){
+        getCityWeatherData(userLocation)
     }
 
     fun onAction(action: CityActions) {
         when(action){
             is CityActions.Search -> getCityWeatherData(action.location)
+            else -> {}
         }
     }
 
@@ -55,13 +62,8 @@ class CityViewModel(
                 }
             }
             else {
-                cityState = CityState.Success(
-                    cityUiState = CityUiState(
-                        found = false
-                    )
-                )
+                cityState = CityState.Unsuccess
             }
-
         }
     }
     companion object{
