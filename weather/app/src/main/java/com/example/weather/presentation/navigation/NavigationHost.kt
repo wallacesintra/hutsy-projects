@@ -35,6 +35,7 @@ fun NavigationHost(){
     val cityViewModel: CityViewModel = viewModel(factory = CityViewModel.Factory)
     val cityUiState = cityViewModel.cityState
     val userLocation = cityViewModel.userLocation
+    val locationList = cityViewModel.userLocationsList
 
     val navController = rememberNavController()
     Scaffold(
@@ -75,7 +76,7 @@ fun NavigationHost(){
             composable(Screen.Current.route) { CurrentContainer(uiState) }
             composable(Screen.Forecast.route) { ForecastContainer(uiState) }
             composable(Screen.City.route) {
-                CityScreen(cityState = cityUiState, location = userLocation, onLocationChange = { cityViewModel.onLocationChange(it) } ) {
+                CityScreen(cityState = cityUiState, location = userLocation,  locationList = locationList,onLocationChange = { cityViewModel.onLocationChange(it) } ) {
                     cityViewModel.searchLocation()
                 }
             }
@@ -95,7 +96,6 @@ fun CurrentContainer(
         else -> {ErrorScreen()}
     }
 }
-
 
 
 @Composable

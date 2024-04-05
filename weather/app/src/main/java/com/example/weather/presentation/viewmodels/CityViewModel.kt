@@ -4,8 +4,10 @@ import android.net.http.HttpException
 import android.nfc.Tag
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -30,13 +32,18 @@ class CityViewModel(
     var userLocation: String by mutableStateOf("")
         private set
 
+    var userLocationsList: List<CityUiState> by mutableStateOf(listOf())
+        private set
+
     fun onLocationChange(location: String){
         userLocation = location
     }
 
     fun searchLocation(){
         getLocationData(userLocation)
+        userLocation = ""
     }
+
 
 
     private fun getLocationData(location: String) {
@@ -50,9 +57,15 @@ class CityViewModel(
                         name = cityData.city.name,
                         country = cityData.city.country,
                         temp = cityData.list[0].main.temp.toInt().toString(),
-                        found = true,
                         mainWeather = cityData.list[0].weather[0].main
                     )
+                )
+
+                userLocationsList = userLocationsList + CityUiState(
+                    name = cityData.city.name,
+                    country = cityData.city.country,
+                    temp = cityData.list[0].main.temp.toInt().toString(),
+                    mainWeather = cityData.list[0].weather[0].main
                 )
 
             } catch (e: Exception) {

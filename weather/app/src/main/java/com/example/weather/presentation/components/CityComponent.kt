@@ -34,7 +34,8 @@ fun CityComponent(
 
     Card(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(4.dp)
+//            .size(150.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -73,4 +74,5 @@ fun CityComponent(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PreviewCityComponent(){
+    CityComponent(iconName = "Clear", temp = "-23", name = "nairobi" )
 }
