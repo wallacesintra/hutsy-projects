@@ -14,7 +14,7 @@ import com.example.weather.presentation.viewmodels.OpenWeatherViewModel
 fun TestScreen(
     uiState: CityUiState
 ){
-    Text(text = uiState.country)
+//    Text(text = uiState.country)
 }
 
 @Composable

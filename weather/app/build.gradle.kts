@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
+    id("org.jetbrains.kotlin.kapt")//room
+
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -26,17 +28,6 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-//        val keyStoreFile = project.rootProject.file("apikeys.properties")
-//        val properties = Properties()
-//        properties.load(keyStoreFile.inputStream())
-//
-//        val apiKey = properties.getProperty("API_KEY ") ?: ""
-//
-//        buildConfigField(
-//            type = "String",
-//            name = "API_KEY",
-//            value = apiKey
-//        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -88,11 +79,14 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.material3.android)
     val navVersion = "2.7.7"
+
 
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     implementation("androidx.compose.material:material:1.6.3")
+
 
     //retrofit
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
@@ -100,6 +94,15 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+    //room
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -37,9 +37,6 @@
           <timeTargetWasSelectedWithDropDown value="2024-03-18T21:30:05.736133452Z" />
         </State>
       </entry>
-      <entry key="HourlyForecastPreview">
-        <State />
-      </entry>
       <entry key="IconOverTextPreview">
         <State>
           <runningDeviceTargetSelectedWithDropDown>
@@ -56,6 +53,9 @@
           <timeTargetWasSelectedWithDropDown value="2024-03-18T16:05:49.514262642Z" />
         </State>
       </entry>
+      <entry key="PreviewCityComponent">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -69,7 +69,7 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-29T12:15:41.735982274Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-04-05T16:53:42.867074120Z" />
         </State>
       </entry>
     </value>

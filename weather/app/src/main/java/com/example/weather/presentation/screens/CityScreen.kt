@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.example.weather.data.local.LocationEntity
 import com.example.weather.presentation.components.CityComponent
 import com.example.weather.presentation.models.CityState
 import com.example.weather.presentation.models.CityUiState
@@ -32,7 +33,8 @@ import com.example.weather.presentation.models.CityUiState
 fun CityScreen(
     cityState: CityState,
     location: String,
-    locationList: List<CityUiState>,
+    cityUiState: CityUiState,
+//    locationList: List<LocationEntity>,
     onLocationChange: (String) -> Unit,
     onSearch: () -> Unit
 ){
@@ -76,9 +78,9 @@ fun CityScreen(
                 CityState.Loading -> LoadingScreen()
                 is CityState.Success -> {
                     LazyVerticalGrid(
-                        columns = GridCells.Adaptive(minSize = 130.dp)
+                        columns = GridCells.Adaptive(minSize = 135.dp)
                     ) {
-                        items(locationList){item ->
+                        items(cityUiState.locationList){item ->
                             CityComponent(
                                 iconName = item.mainWeather,
                                 temp = item.temp,

@@ -1,4 +1,4 @@
-package com.example.weather.data.demo
+package com.example.weather.data.dummy
 
 import android.content.Context
 import java.io.BufferedReader

@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,7 +36,8 @@ fun NavigationHost(){
     val cityViewModel: CityViewModel = viewModel(factory = CityViewModel.Factory)
     val cityUiState = cityViewModel.cityState
     val userLocation = cityViewModel.userLocation
-    val locationList = cityViewModel.userLocationsList
+//    val locationList = cityViewModel.userLocationsList
+    val state by cityViewModel.state.collectAsState()
 
     val navController = rememberNavController()
     Scaffold(
@@ -76,7 +78,12 @@ fun NavigationHost(){
             composable(Screen.Current.route) { CurrentContainer(uiState) }
             composable(Screen.Forecast.route) { ForecastContainer(uiState) }
             composable(Screen.City.route) {
-                CityScreen(cityState = cityUiState, location = userLocation,  locationList = locationList,onLocationChange = { cityViewModel.onLocationChange(it) } ) {
+                CityScreen(
+                    cityState = cityUiState,
+                    location = userLocation,
+//                    locationList = locationList,
+                    cityUiState = state,
+                    onLocationChange = { cityViewModel.onLocationChange(it) } ) {
                     cityViewModel.searchLocation()
                 }
             }
