@@ -6,4 +6,7 @@ sealed interface CityState {
     object Error: CityState
 
     object Loading: CityState
+
+    object LocationNotFound: CityState
+
 }

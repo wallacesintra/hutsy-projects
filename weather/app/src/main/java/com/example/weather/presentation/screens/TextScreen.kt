@@ -5,10 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weather.presentation.models.CityState
 import com.example.weather.presentation.models.CityUiState
-import com.example.weather.presentation.models.CurrentWeatherUiState
-import com.example.weather.presentation.models.WeatherState
-import com.example.weather.presentation.viewmodels.CityViewModel
-import com.example.weather.presentation.viewmodels.OpenWeatherViewModel
+import com.example.weather.presentation.viewmodels.LocationsViewModel
 
 @Composable
 fun TestScreen(
@@ -20,20 +17,20 @@ fun TestScreen(
 @Composable
 fun TestContainer(){
 //    val weatherViewModel: OpenWeatherViewModel = viewModel(factory = OpenWeatherViewModel.Factory)
-    val cityViewModel: CityViewModel = viewModel(factory = CityViewModel.Factory)
+    val locationsViewModel: LocationsViewModel = viewModel(factory = LocationsViewModel.Factory)
 
 //    val uiState = weatherViewModel.weatherState
 
-    val cityUiState = cityViewModel.cityState
+    val cityUiState = locationsViewModel.cityState
 //    val cityUiState = weatherViewModel.cityState
 
-    when (cityUiState) {
-        is CityState.Loading -> TestLoadingScreen()
-        is CityState.Error -> TestErrorScreen()
-        is CityState.Success -> TestScreen(uiState = cityUiState.cityUiState)
-//        CityState.Unsuccess -> {
-//            Text(text = "Unsuccess")}
-    }
+//    when (cityUiState) {
+//        is CityState.Loading -> TestLoadingScreen()
+//        is CityState.Error -> TestErrorScreen()
+//        is CityState.Success -> TestScreen(uiState = cityUiState.cityUiState)
+////        CityState.Unsuccess -> {
+////            Text(text = "Unsuccess")}
+//    }
 }
 
 

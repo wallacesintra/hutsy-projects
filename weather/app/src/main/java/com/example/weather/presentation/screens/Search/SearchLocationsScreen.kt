@@ -1,14 +1,12 @@
-package com.example.weather.presentation.screens
+package com.example.weather.presentation.screens.Search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -24,9 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.weather.data.local.LocationEntity
-import com.example.weather.presentation.components.CityComponent
+import com.example.weather.presentation.components.LocationComponent
 import com.example.weather.presentation.models.CityState
 import com.example.weather.presentation.models.CityUiState
+import com.example.weather.presentation.screens.ErrorScreen
+import com.example.weather.presentation.screens.LoadingScreen
 
 
 @Composable
@@ -34,9 +34,10 @@ fun CityScreen(
     cityState: CityState,
     location: String,
     cityUiState: CityUiState,
-//    locationList: List<LocationEntity>,
     onLocationChange: (String) -> Unit,
-    onSearch: () -> Unit
+    onSearch: () -> Unit,
+    onDismiss: () -> Unit = {},
+    onClick: (LocationEntity) -> Unit = {}
 ){
 
     Column(
@@ -74,17 +75,21 @@ fun CityScreen(
         )
 
             when(cityState){
-                CityState.Error -> ErrorScreen()
+                CityState.LocationNotFound -> LocationNotFound(onDismiss)
                 CityState.Loading -> LoadingScreen()
+                CityState.Error -> ErrorScreen()
                 is CityState.Success -> {
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(minSize = 135.dp)
                     ) {
                         items(cityUiState.locationList){item ->
-                            CityComponent(
-                                iconName = item.mainWeather,
-                                temp = item.temp,
-                                name = "${item.name}, ${item.country}"
+                            LocationComponent(
+//                                iconName = item.mainWeather,
+//                                temp = item.temp,
+//                                name = "${item.name}, ${item.country}",
+//                                onClick = {onClick(item)}
+                                locationEntity = item,
+                                onClick ={onClick(item)}
                             )
                         }
                     }

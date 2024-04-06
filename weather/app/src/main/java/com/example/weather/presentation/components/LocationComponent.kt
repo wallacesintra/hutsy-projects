@@ -1,21 +1,18 @@
 package com.example.weather.presentation.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,18 +20,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.weather.R
+import com.example.weather.data.local.LocationEntity
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CityComponent(
-    iconName: String,
-    temp: String,
-    name: String
+fun LocationComponent(
+    locationEntity: LocationEntity,
+    onClick: (LocationEntity) -> Unit
 ){
-    val icon = drawableMap[iconName] ?: R.drawable.ic_launcher_foreground
+    val icon = drawableMap[locationEntity.mainWeather] ?: R.drawable.ic_launcher_foreground
 
     Card(
         modifier = Modifier
             .padding(4.dp)
+            .combinedClickable(
+                onLongClickLabel = "delete location",
+                onLongClick = {
+                    onClick(locationEntity)
+                },
+                onClick = {}
+            )
 //            .size(150.dp)
     ) {
         Column(
@@ -53,7 +58,7 @@ fun CityComponent(
                         .align(Alignment.BottomEnd)
                 )
                 Text(
-                    text = "$temp°",
+                    text = "${locationEntity.temp}°",
                     fontFamily = FontFamily.Serif,
                     fontSize = 80.sp,
                     modifier = Modifier
@@ -62,7 +67,7 @@ fun CityComponent(
                 )
             }
             Text(
-                text = name,
+                text = locationEntity.name,
                 fontSize = 18.sp
             )
         }
@@ -74,5 +79,5 @@ fun CityComponent(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PreviewCityComponent(){
-    CityComponent(iconName = "Clear", temp = "-23", name = "nairobi" )
+//    LocationComponent(iconName = "Clear", temp = "-23", name = "nairobi" ){}
 }

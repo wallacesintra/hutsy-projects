@@ -20,24 +20,24 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.weather.presentation.components.TitleBar
 import com.example.weather.presentation.models.WeatherState
-import com.example.weather.presentation.screens.CityScreen
-import com.example.weather.presentation.screens.CurrentScreen
+import com.example.weather.presentation.screens.Search.CityScreen
+import com.example.weather.presentation.screens.CurrentLocation.CurrentScreen
 import com.example.weather.presentation.screens.ErrorScreen
-import com.example.weather.presentation.screens.ForecastScreen
+import com.example.weather.presentation.screens.Forecast.ForecastScreen
 import com.example.weather.presentation.screens.LoadingScreen
-import com.example.weather.presentation.viewmodels.CityViewModel
-import com.example.weather.presentation.viewmodels.OpenWeatherViewModel
+import com.example.weather.presentation.viewmodels.LocationsViewModel
+import com.example.weather.presentation.viewmodels.CurrentLocationWeatherViewModel
 
 @Composable
 fun NavigationHost(){
-    val weatherViewModel: OpenWeatherViewModel = viewModel(factory = OpenWeatherViewModel.Factory)
+    val weatherViewModel: CurrentLocationWeatherViewModel = viewModel(factory = CurrentLocationWeatherViewModel.Factory)
     val uiState = weatherViewModel.weatherState
 
-    val cityViewModel: CityViewModel = viewModel(factory = CityViewModel.Factory)
-    val cityUiState = cityViewModel.cityState
-    val userLocation = cityViewModel.userLocation
+    val locationsViewModel: LocationsViewModel = viewModel(factory = LocationsViewModel.Factory)
+    val cityUiState = locationsViewModel.cityState
+    val userLocation = locationsViewModel.userLocation
 //    val locationList = cityViewModel.userLocationsList
-    val state by cityViewModel.state.collectAsState()
+    val state by locationsViewModel.state.collectAsState()
 
     val navController = rememberNavController()
     Scaffold(
@@ -81,11 +81,12 @@ fun NavigationHost(){
                 CityScreen(
                     cityState = cityUiState,
                     location = userLocation,
-//                    locationList = locationList,
                     cityUiState = state,
-                    onLocationChange = { cityViewModel.onLocationChange(it) } ) {
-                    cityViewModel.searchLocation()
-                }
+                    onLocationChange = { locationsViewModel.onLocationChange(it) } ,
+                    onDismiss = {locationsViewModel.toSuccess()},
+                    onSearch = {locationsViewModel.searchLocation()},
+                    onClick = {locationsViewModel.deleteLocation(it)},
+                )
             }
             composable(Screen.Loading.route){ LoadingScreen()}
             composable(Screen.Error.route) { ErrorScreen()}

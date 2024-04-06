@@ -14,7 +14,7 @@ interface LocationDao {
     @Delete
     fun deleteLocation(location: LocationEntity)
 
-    @Query("SELECT * FROM locationentity")
-    fun displayAll(): Flow<List<LocationEntity>>
+    @Query("SELECT * FROM locationentity ORDER BY id DESC")
+    fun displayAllinReverse(): Flow<List<LocationEntity>>
 
 }

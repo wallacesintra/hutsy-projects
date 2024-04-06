@@ -3,13 +3,13 @@ package com.example.weather.data
 import com.example.weather.network.OpenWeatherApiService
 import com.example.weather.network.dto.CityWeatherData
 
-interface CityWeatherDataRepository {
+interface LocationWeatherDataRepository {
     suspend fun getCityWeatherData(location: String): CityWeatherData
 }
 
 
-class NetworkCityWeatherDataRepository(
+class NetworkLocationWeatherDataRepository(
     private val openWeatherApiService: OpenWeatherApiService
-): CityWeatherDataRepository{
+): LocationWeatherDataRepository{
     override suspend fun getCityWeatherData(location: String): CityWeatherData = openWeatherApiService.getCityWeather(location)
 }

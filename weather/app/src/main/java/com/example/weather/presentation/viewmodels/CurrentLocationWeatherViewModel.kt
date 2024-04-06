@@ -16,7 +16,7 @@ import com.example.weather.presentation.models.WeatherState
 import kotlinx.coroutines.launch
 import okio.IOException
 
-class OpenWeatherViewModel(
+class CurrentLocationWeatherViewModel(
     private val weatherDataRepository: WeatherDataRepository,
 ) : ViewModel() {
     var weatherState: WeatherState by mutableStateOf(WeatherState.Loading)
@@ -55,7 +55,7 @@ class OpenWeatherViewModel(
             initializer {
                 val application = (this[APPLICATION_KEY] as WeatherApplication)
                 val weatherDataRepository = application.container.weatherDataRepository
-                OpenWeatherViewModel(weatherDataRepository)
+                CurrentLocationWeatherViewModel(weatherDataRepository)
             }
         }
     }

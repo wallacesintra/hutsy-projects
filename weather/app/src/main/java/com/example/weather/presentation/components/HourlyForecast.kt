@@ -53,7 +53,10 @@ fun HourlyForecast(
             )
         }
 
-        LazyRow {
+        LazyRow(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             items(items = list.take(9)) { item ->
                 val date = inputFormat.parse(item.dtTxt)
                 val formattedDate = if (date != null) outputFormat.format(date) else "Invalid date"
