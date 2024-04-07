@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,7 +25,7 @@ import androidx.compose.ui.zIndex
 import com.example.weather.R
 import com.example.weather.data.local.LocationEntity
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun LocationComponent(
     locationEntity: LocationEntity,
@@ -79,5 +82,5 @@ fun LocationComponent(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PreviewCityComponent(){
-//    LocationComponent(iconName = "Clear", temp = "-23", name = "nairobi" ){}
+    LocationComponent(locationEntity = LocationEntity("mombasa", "kenya", "23", "Rain")){}
 }

@@ -14,7 +14,7 @@ interface BookDao {
     @Delete
     fun deleteBook(book: Book)
 
-    @Query("SELECT * FROM student")
+    @Query("SELECT * FROM book")
     fun displayAllBooks(): Flow<List<Book>>
 
 }
