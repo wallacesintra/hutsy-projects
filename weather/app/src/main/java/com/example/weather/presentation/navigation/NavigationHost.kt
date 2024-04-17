@@ -19,19 +19,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.weather.presentation.components.TitleBar
-import com.example.weather.presentation.models.WeatherState
-import com.example.weather.presentation.screens.Search.CityScreen
-import com.example.weather.presentation.screens.CurrentLocation.CurrentScreen
+import com.example.weather.presentation.models.WeatherCurrentState
+import com.example.weather.presentation.screens.search.CityScreen
+import com.example.weather.presentation.screens.currentLocation.CurrentScreen
 import com.example.weather.presentation.screens.ErrorScreen
-import com.example.weather.presentation.screens.Forecast.ForecastScreen
+import com.example.weather.presentation.screens.forecast.ForecastScreen
 import com.example.weather.presentation.screens.LoadingScreen
+import com.example.weather.presentation.screens.NetworkErrorScreen
 import com.example.weather.presentation.viewmodels.LocationsViewModel
 import com.example.weather.presentation.viewmodels.CurrentLocationWeatherViewModel
 
 @Composable
 fun NavigationHost(){
     val weatherViewModel: CurrentLocationWeatherViewModel = viewModel(factory = CurrentLocationWeatherViewModel.Factory)
-    val uiState = weatherViewModel.weatherState
+    val uiState = weatherViewModel.weatherCurrentState
 
     val locationsViewModel: LocationsViewModel = viewModel(factory = LocationsViewModel.Factory)
     val cityUiState = locationsViewModel.cityState
@@ -96,11 +97,11 @@ fun NavigationHost(){
 
 @Composable
 fun CurrentContainer(
-    uiState: WeatherState
+    uiState: WeatherCurrentState
 ){
     when(uiState){
-        is WeatherState.Loading -> LoadingScreen()
-        is WeatherState.Success -> CurrentScreen(state = uiState.weatherUiState)
+        is WeatherCurrentState.Loading -> LoadingScreen()
+        is WeatherCurrentState.Success -> CurrentScreen(state = uiState.weatherUiState)
         else -> {ErrorScreen()}
     }
 }
@@ -108,11 +109,12 @@ fun CurrentContainer(
 
 @Composable
 fun ForecastContainer(
-    uiState: WeatherState
+    uiState: WeatherCurrentState
 ){
     when(uiState){
-        is WeatherState.Loading -> LoadingScreen()
-        is WeatherState.Success -> ForecastScreen(list = uiState.weatherUiState.hourlyForecast)
+        is WeatherCurrentState.Loading -> LoadingScreen()
+        is WeatherCurrentState.Success -> ForecastScreen(list = uiState.weatherUiState.hourlyForecast)
+        is WeatherCurrentState.NetworkError -> NetworkErrorScreen()
         else -> {ErrorScreen()}
     }
 }

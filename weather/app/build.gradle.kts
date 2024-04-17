@@ -87,6 +87,8 @@ dependencies {
 
     implementation("androidx.compose.material:material:1.6.3")
 
+    // location
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 
     //retrofit
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")

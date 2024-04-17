@@ -1,4 +1,4 @@
-package com.example.weather.presentation.screens.Search
+package com.example.weather.presentation.screens.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -84,10 +84,6 @@ fun CityScreen(
                     ) {
                         items(cityUiState.locationList){item ->
                             LocationComponent(
-//                                iconName = item.mainWeather,
-//                                temp = item.temp,
-//                                name = "${item.name}, ${item.country}",
-//                                onClick = {onClick(item)}
                                 locationEntity = item,
                                 onClick ={onClick(item)}
                             )

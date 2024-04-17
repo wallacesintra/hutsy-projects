@@ -1,4 +1,4 @@
-package com.example.weather.presentation.screens.CurrentLocation
+package com.example.weather.presentation.screens.currentLocation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
