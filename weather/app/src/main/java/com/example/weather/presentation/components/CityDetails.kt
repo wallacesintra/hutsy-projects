@@ -32,7 +32,7 @@ fun CityDetails(
         Text(
             text = place,
             style = MaterialTheme.typography.labelLarge,
-            fontSize = 24.sp,
+            fontSize = 22.sp,
             modifier = Modifier
                 .padding(vertical = 15.dp)
         )

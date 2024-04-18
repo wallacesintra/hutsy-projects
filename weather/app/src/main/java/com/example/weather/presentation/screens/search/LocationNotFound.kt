@@ -51,13 +51,11 @@ fun LocationNotFound(
                 Icon(
                     painter = painterResource(id = R.drawable.no_location),
                     contentDescription = stringResource(id = R.string.no_location),
-//                    tint = MaterialTheme.colors.error,
                     modifier = Modifier.size(60.dp)
                 )
                 Text(
                     text = stringResource(id = R.string.no_location),
                     fontSize = 18.sp,
-//                    color = MaterialTheme.colors.error,
                     modifier = Modifier
                         .fillMaxSize()
                         .wrapContentSize(Alignment.Center),

@@ -28,7 +28,7 @@ fun LocationComponent(
     locationEntity: LocationEntity,
     onClick: (LocationEntity) -> Unit
 ){
-    val icon = drawableMap[locationEntity.mainWeather] ?: R.drawable.ic_launcher_foreground
+    val icon = drawableMap[locationEntity.mainWeather] ?: R.drawable.cloudy
 
     Card(
         modifier = Modifier
