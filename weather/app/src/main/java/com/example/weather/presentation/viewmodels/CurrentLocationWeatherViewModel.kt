@@ -33,37 +33,31 @@ class CurrentLocationWeatherViewModel(
     private val _location = MutableStateFlow<LocationModel?>(null)
     val location: StateFlow<LocationModel?> get() = _location
 
-    private val latitude = location.value?.latitude
-    private val longitude = location.value?.longitude
-
     init {
-//        fetchLocation()
-        getWeatherData()
+        fetchLocation()
     }
 
-    private suspend fun fetchLocation(){
+    private  fun fetchLocation(){
         viewModelScope.launch {
             _location.value = locationDataSource.fetchCurrentLocation().first()
+            val lat = _location.value!!.latitude
+            val lon = _location.value!!.longitude
+
+            getWeatherData(longitude = lon, latitude = lat)
         }
     }
 
-    private fun getWeatherData(){
+    private fun getWeatherData(
+        longitude: Double,
+        latitude: Double
+    ){
         viewModelScope.launch {
-            fetchLocation()
 
             try {
                 weatherCurrentState = WeatherCurrentState.Loading
 
+                val weatherData = weatherDataRepository.getWeatherData(lat = latitude, lon = longitude)
 
-
-                val lat = latitude ?: 1.0
-                val lon = longitude ?: 1.0
-
-                if (lat == 0.0&& lon == 0.0){
-                    weatherCurrentState = WeatherCurrentState.NetworkError
-                }
-
-                val weatherData = weatherDataRepository.getWeatherData(lat = lat, lon = lon)
                 weatherCurrentState = try {
                     WeatherCurrentState.Success(
                         weatherUiState =CurrentWeatherUiState(

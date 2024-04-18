@@ -16,9 +16,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weather.presentation.design_system.theme.WeatherTheme
+import com.example.weather.presentation.navigation.CurrentContainer
 import com.example.weather.presentation.navigation.NavigationHost
 import com.example.weather.presentation.screens.TestContainer
 import com.example.weather.presentation.screens.TestScreen
+import com.example.weather.presentation.screens.currentLocation.CurrentScreen
 import com.example.weather.presentation.viewmodels.CurrentLocationWeatherViewModel
 import com.google.gson.internal.GsonBuildConfig
 
@@ -42,12 +44,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    val viewModel: CurrentLocationWeatherViewModel = viewModel(factory = CurrentLocationWeatherViewModel.Factory)
-//                    val location = viewModel.location.collectAsState()
-
                     NavigationHost()
-
-//                    Text(text = "${location.value?.latitude}")
                 }
             }
         }
