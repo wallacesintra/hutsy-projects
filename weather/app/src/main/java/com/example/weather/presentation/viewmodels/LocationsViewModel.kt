@@ -38,7 +38,7 @@ class LocationsViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val _locations = _state
         .flatMapLatest { _ ->
-            dao.displayAllinReverse()
+            dao.displayAllReverse()
 
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

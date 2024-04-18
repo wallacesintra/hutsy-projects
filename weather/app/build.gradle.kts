@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
+
     id("org.jetbrains.kotlin.kapt")//room
 
 }
@@ -83,7 +84,7 @@ dependencies {
     val navVersion = "2.7.7"
 
 
-    implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation(libs.androidx.navigation.compose)
 
     implementation("androidx.compose.material:material:1.6.3")
 
