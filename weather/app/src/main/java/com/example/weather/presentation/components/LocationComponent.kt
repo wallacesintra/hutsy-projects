@@ -2,16 +2,12 @@ package com.example.weather.presentation.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,8 +20,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.weather.R
 import com.example.weather.data.local.LocationEntity
+import com.example.weather.presentation.utils.drawableMap
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LocationComponent(
     locationEntity: LocationEntity,
@@ -43,7 +40,6 @@ fun LocationComponent(
                 },
                 onClick = {}
             )
-//            .size(150.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -70,7 +66,7 @@ fun LocationComponent(
                 )
             }
             Text(
-                text = locationEntity.name,
+                text = "${locationEntity.name},${locationEntity.country}",
                 fontSize = 18.sp
             )
         }

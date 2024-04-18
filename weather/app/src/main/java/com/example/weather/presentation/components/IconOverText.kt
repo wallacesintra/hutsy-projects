@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather.R
+import com.example.weather.presentation.utils.drawableMap
 
 @Composable
 fun IconOverText(
@@ -25,7 +26,7 @@ fun IconOverText(
     val icon = drawableMap[iconName] ?: R.drawable.ic_launcher_foreground
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.padding(20.dp)
+        modifier = Modifier.padding(15.dp)
     ) {
         Text(
             text = text,

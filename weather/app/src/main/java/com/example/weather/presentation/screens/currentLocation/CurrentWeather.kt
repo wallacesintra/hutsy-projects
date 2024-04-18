@@ -24,7 +24,7 @@ fun CurrentScreen(
     ) {
         CityDetails(
             iconName = state.hourlyForecast[0].weather[0].main,
-            place = "${state.place}, ${state.country}",
+            place = state.place,
             temp = state.temp,
             message = state.message
         )

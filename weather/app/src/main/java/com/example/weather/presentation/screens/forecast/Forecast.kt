@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.weather.R
 import com.example.weather.network.dto.CurrentWeatherData
-import com.example.weather.presentation.components.drawableMap
+import com.example.weather.presentation.utils.drawableMap
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -37,7 +38,7 @@ fun ForecastScreen(
 ){
     Column {
         Text(
-            text = "Next 5 days",
+            text = stringResource(id = R.string.five_days),
             fontSize = 22.sp,
             modifier = Modifier
                 .padding(8.dp)

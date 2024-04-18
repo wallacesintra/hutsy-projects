@@ -1,3 +1,9 @@
-<resources>
-    <string name="app_name">Weather</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">WeatherNow</string>
+    <string name="forecast" tools:ignore="MissingTranslation">Forecast</string>
+    <string name="five_days" tools:ignore="MissingTranslation">Next 5 days</string>
+    <string name="your_locations" tools:ignore="MissingTranslation">Your Locations</string>
+    <string name="no_location" tools:ignore="MissingTranslation">Location not Found</string>
+    <string name="connect_internet" tools:ignore="MissingTranslation">Connect to the Internet</string>
+
 </resources>

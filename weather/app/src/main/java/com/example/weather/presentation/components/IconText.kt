@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather.R
+import com.example.weather.presentation.utils.drawableMap
 
 @Composable
 fun  RowIconText(

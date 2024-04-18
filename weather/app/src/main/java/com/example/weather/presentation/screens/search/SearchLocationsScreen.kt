@@ -16,11 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.example.weather.R
 import com.example.weather.data.local.LocationEntity
 import com.example.weather.presentation.components.LocationComponent
 import com.example.weather.presentation.models.CityState
@@ -44,7 +46,7 @@ fun CityScreen(
         modifier = Modifier.padding(10.dp)
     ) {
         Text(
-            text = "Your locations",
+            text = stringResource(id = R.string.your_locations),
             fontSize = 20.sp,
             modifier = Modifier
                 .padding(vertical = 8.dp)

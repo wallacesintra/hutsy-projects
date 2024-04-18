@@ -1,6 +1,5 @@
 package com.example.weather.presentation.viewmodels
 
-import android.app.Activity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -20,8 +19,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import okio.IOException
-import retrofit2.HttpException
 
 class CurrentLocationWeatherViewModel(
     private val weatherDataRepository: WeatherDataRepository,
@@ -64,6 +61,7 @@ class CurrentLocationWeatherViewModel(
                             place = weatherData.city.name,
                             country = weatherData.city.country,
                             temp = weatherData.list[0].main.temp.toInt().toString(),
+                            message = weatherData.list[0].weather[0].description,
                             windSpeed = weatherData.list[0].wind.speed.toInt().toString(),
                             humidity = weatherData.list[0].main.humidity.toString(),
                             hourlyForecast = weatherData.list

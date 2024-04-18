@@ -39,7 +39,6 @@ fun NavigationHost(
     val locationsViewModel: LocationsViewModel = viewModel(factory = LocationsViewModel.Factory)
     val cityUiState = locationsViewModel.cityState
     val userLocation = locationsViewModel.userLocation
-//    val locationList = cityViewModel.userLocationsList
     val state by locationsViewModel.state.collectAsState()
 
     val navController = rememberNavController()

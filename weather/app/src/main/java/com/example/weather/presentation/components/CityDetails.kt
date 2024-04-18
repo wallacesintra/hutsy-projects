@@ -22,8 +22,6 @@ fun CityDetails(
     temp: String,
     message: String
 ) {
-//    val icon = drawableMap[iconName] ?: R.drawable.ic_launcher_foreground
-
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -34,17 +32,19 @@ fun CityDetails(
         Text(
             text = place,
             style = MaterialTheme.typography.labelLarge,
-            fontSize = 22.sp,
+            fontSize = 24.sp,
             modifier = Modifier
                 .padding(vertical = 15.dp)
         )
         IconOverText(iconName = iconName, text = "$temp°")
         Text(
             text = message,
-            fontSize = 20.sp
+            fontSize = 22.sp,
+            style = MaterialTheme.typography.labelLarge
         )
     }
 }
+
 
 @Composable
 fun WeatherDetails(
@@ -68,5 +68,6 @@ fun WeatherDetails(
 @Composable
 fun CityDetailsPreview(
 ){
+    CityDetails(iconName = "Clear", place = "nairobi", temp = "78", message = "rain")
 //    WeatherDetails(speed = "11km/hr", humidity = "02%", time = "8hr")
 }

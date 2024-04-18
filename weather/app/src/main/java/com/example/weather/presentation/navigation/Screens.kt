@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import com.example.weather.R
 
 sealed class Screen(val route: String, val label: String, @DrawableRes val icon: Int?) {
-    object Current: Screen("Current", "Home", R.drawable.cloudy)
+    object Current: Screen("Current", "Home", R.drawable.home_location)
     object Forecast: Screen("Forecast", "Forecast" , R.drawable.list)
 
     object Loading: Screen("Loading", "loading screen", null)

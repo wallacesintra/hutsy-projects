@@ -1,4 +1,4 @@
-package com.example.weather.presentation.components
+package com.example.weather.presentation.utils
 
 import com.example.weather.R
 
