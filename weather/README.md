@@ -22,7 +22,7 @@ The application is written with [Kotlin](https://kotlinlang.org/)
 
 ## Screenshots
 
-<img src="screenshots/img.png" width = "250" alt = "app_screen">
+<img src="screenshots/home.png" width = "250" alt = "app_screen">
 
 <img src="screenshots/forecast.png" width = "250" alt = "forecast_screen">
 
