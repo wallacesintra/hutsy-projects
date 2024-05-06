@@ -34,7 +34,6 @@ fun IconOverText(
             fontSize = 180.sp,
             letterSpacing = 0.01.sp,
             modifier = Modifier.padding(5.dp)
-
         )
         Image(
             painter = painterResource(icon),

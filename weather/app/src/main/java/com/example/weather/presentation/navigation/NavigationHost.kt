@@ -31,7 +31,6 @@ import com.example.weather.presentation.viewmodels.CurrentLocationWeatherViewMod
 
 @Composable
 fun NavigationHost(
-
 ){
     val weatherViewModel: CurrentLocationWeatherViewModel = viewModel(factory = CurrentLocationWeatherViewModel.Factory)
     val uiState = weatherViewModel.weatherCurrentState
