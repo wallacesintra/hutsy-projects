@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-private const val api = BuildConfig.API_KEY
+private const val api_key = BuildConfig.API_KEY
 
 
 interface OpenWeatherApiService {
@@ -15,19 +15,15 @@ interface OpenWeatherApiService {
     suspend fun getWeather(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
-        @Query("appid") appid: String = api,
+        @Query("appid") appid: String = api_key,
         @Query("units") units: String = "metric"
     ): CurrentWeatherData
 
-    //get city data
-//    @GET("forecast?q=$city&appid=$api&units=metric")
-//    @GET("forecast?q={location}&appid=$api&units=metric")
-//    suspend fun getCityWeather(@Query("location") location: String): CityWeatherData
 
     @GET("forecast")
     suspend fun getCityWeather(
         @Query("q") location: String,
-        @Query("appid") appid: String = api,
+        @Query("appid") appid: String = api_key,
         @Query("units") units: String = "metric"
     ) : CityWeatherData
 }

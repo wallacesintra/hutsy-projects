@@ -16,11 +16,13 @@ data class City(
     val country: String
 )
 
+
 @Serializable
 data class WeatherList(
     @Contextual val main: Main,
     @Contextual val weather: List<Weather>
 )
+
 
 @Serializable
 data class Main(

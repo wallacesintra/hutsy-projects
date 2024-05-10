@@ -43,7 +43,7 @@ class DefaultContainer(private val applicationContext: Context): AppContainer {
     }
 
     override val locationDB by lazy {
-        Room.databaseBuilder(
+         Room.databaseBuilder(
             applicationContext,
             LocationDatabase::class.java,
             "locations.db"
